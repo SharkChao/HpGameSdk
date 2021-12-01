@@ -13,12 +13,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import com.hupu.gamesdk.HpGame
+import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.base.CommonUtil
 import com.hupu.gamesdk.base.CommonUtil.Companion.encrypt
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
+import com.hupu.gamesdk.core.HpGameLogin
 import com.hupu.gamesdk.databinding.HpGameCoreLoginDialogBinding
 import org.json.JSONObject
 

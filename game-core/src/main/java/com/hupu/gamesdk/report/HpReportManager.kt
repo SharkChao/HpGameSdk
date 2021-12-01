@@ -6,7 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.coroutineScope
 import com.google.gson.Gson
-import com.hupu.gamesdk.HpGame
+import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.base.HPAppInfo
 import com.hupu.gamesdk.base.HPDeviceInfo
 import com.hupu.gamesdk.base.HpGameConstant
@@ -15,8 +15,6 @@ import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.login.HpLoginManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
 
 object HpReportManager {
     private val deviceId: String by lazy {

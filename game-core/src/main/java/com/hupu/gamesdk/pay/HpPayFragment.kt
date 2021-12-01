@@ -22,6 +22,7 @@ import com.hupu.gamesdk.base.CommonUtil.Companion.dp2px
 import com.hupu.gamesdk.base.HpGameConstant
 import com.hupu.gamesdk.base.isSuccess
 import com.hupu.gamesdk.config.HpPayItem
+import com.hupu.gamesdk.core.HpGamePay
 import com.hupu.gamesdk.databinding.HpGameCorePayDialogBinding
 import com.hupu.gamesdk.login.HpLoginManager
 import com.hupu.gamesdk.pay.entity.HpPayEntity

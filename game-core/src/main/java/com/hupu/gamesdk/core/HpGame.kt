@@ -1,8 +1,7 @@
-package com.hupu.gamesdk
+package com.hupu.gamesdk.core
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AppCompatActivity
@@ -16,10 +15,8 @@ import com.hupu.gamesdk.config.HpConfigManager
 import com.hupu.gamesdk.init.HpCheckInitManager
 import com.hupu.gamesdk.init.HpCheckInitResult
 import com.hupu.gamesdk.init.HpGameAppInfo
-import com.hupu.gamesdk.login.HpGameLogin
 import com.hupu.gamesdk.login.HpLoginManager
 import com.hupu.gamesdk.report.HpReportManager
-import com.hupu.gamesdk.secret.HpGameSecret
 import org.json.JSONObject
 import java.util.concurrent.CountDownLatch
 
@@ -135,8 +132,8 @@ class HpGame private constructor(private val builder: Builder){
         val countDownLatch = CountDownLatch(1)
         HpGameAppInfo.appId = builder.mAppId
         HpGameAppInfo.appKey = builder.mAppKey
-        HpGame.debug = builder.mDebug
-        HpGame.context = context
+        debug = builder.mDebug
+        Companion.context = context
 
         //初始化配置
         HpConfigManager.initConfig()
@@ -178,8 +175,8 @@ class HpGame private constructor(private val builder: Builder){
 
         HpGameAppInfo.appId = builder.mAppId
         HpGameAppInfo.appKey = builder.mAppKey
-        HpGame.debug = builder.mDebug
-        HpGame.context = context
+        debug = builder.mDebug
+        Companion.context = context
 
         //初始化配置
         HpConfigManager.initConfig()

@@ -1,6 +1,6 @@
 package com.hupu.gamesdk.base
 
-import com.hupu.gamesdk.HpGame
+import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.login.HpLoginManager
 import okhttp3.OkHttpClient

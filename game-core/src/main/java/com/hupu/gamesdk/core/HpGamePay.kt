@@ -1,12 +1,12 @@
-package com.hupu.gamesdk.pay
+package com.hupu.gamesdk.core
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
+import com.hupu.gamesdk.pay.HpPayFragment
 import com.hupu.gamesdk.pay.entity.HpPayEntity
 import com.hupu.gamesdk.report.HpReportManager
 

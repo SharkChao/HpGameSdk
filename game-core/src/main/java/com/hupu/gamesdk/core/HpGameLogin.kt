@@ -1,4 +1,4 @@
-package com.hupu.gamesdk.login
+package com.hupu.gamesdk.core
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpLoadingFragment
 import com.hupu.gamesdk.init.HpGameAppInfo
+import com.hupu.gamesdk.login.HpLoginFragment
+import com.hupu.gamesdk.login.HpLoginManager
+import com.hupu.gamesdk.login.HpLoginViewModel
 import org.json.JSONObject
 
 class HpGameLogin {
