@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <include layout="@layout/hp_game_core_pay_layout"
+        android:id="@+id/cl_content"/>
+    <include layout="@layout/hp_game_core_pay_result_layout"
+        android:visibility="gone"
+        android:id="@+id/cl_result"/>
+    <include layout="@layout/hp_game_core_pay_loading_layout"
+        android:visibility="gone"
+        android:id="@+id/cl_loading"/>
+</FrameLayout>

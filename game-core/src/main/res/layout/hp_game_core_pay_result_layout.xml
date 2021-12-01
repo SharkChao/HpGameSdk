@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:paddingTop="20dp"
+    android:paddingBottom="36dp"
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="15sp"
+        android:textColor="#000000" />
+
+    <ImageView
+        android:id="@+id/iv_status"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@mipmap/hp_game_core_pay_dialog_success_icon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_status"
+        android:layout_marginTop="50dp"/>
+
+    <TextView
+        android:id="@+id/tv_sure"
+        android:layout_width="248dp"
+        android:layout_height="44dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_status"
+        android:layout_marginTop="52dp"
+        android:text="确定"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:background="#C60100"
+        android:textColor="#FFFFFF"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

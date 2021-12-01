@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="20dp"
+    android:paddingBottom="36dp"
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp">
+
+    <com.hupu.gamesdk.base.ProgressWheel
+        android:id="@+id/progress_bar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:matProg_barColor="#B42127"
+        app:matProg_progressIndeterminate="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="加载中..."
+        android:textColor="@color/hp_game_core_pay_dialog_tag_color"
+        android:textSize="13sp" />
+</LinearLayout>

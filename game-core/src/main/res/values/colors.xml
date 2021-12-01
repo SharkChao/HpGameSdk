@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="hp_game_core_pay_dialog_tag_color">#737377</color>
+    <color name="hp_game_core_pay_dialog_content_color">#000000</color>
+</resources>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:background="#FFFFFF"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="未成年人防沉迷提示"
+        android:textColor="#404657"
+        android:textSize="18sp"/>
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        android:layout_marginTop="20dp"
+        android:textColor="#727A85"
+        android:textSize="13sp"
+        android:text="积极响应并落实国家新闻出版署《关于防止未成年人沉迷网络游戏的通知》，净化网络环境，推广文明上网，保护未成年人身心健康，有效解决未成年人沉迷网络游戏的社会问题。\n\n【健康系统】判定您为未成年人，暂时无法登录游戏"/>
+
+    <TextView
+        android:id="@+id/tv_sure"
+        android:layout_width="126dp"
+        android:layout_height="44dp"
+        android:text="确 认"
+        android:textColor="#FFFFFF"
+        android:background="#D7312E"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_desc"
+        android:layout_marginTop="30dp"
+        android:gravity="center"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

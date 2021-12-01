@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_alipay"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginLeft="20dp">
+
+    <ImageView
+        android:id="@+id/iv_pay"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@mipmap/hp_game_core_pay_dialog_alipay" />
+
+    <TextView
+        android:id="@+id/tv_pay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:textColor="@color/hp_game_core_pay_dialog_content_color"
+        android:textSize="13sp" />
+
+    <ImageView
+        android:id="@+id/iv_pay_select"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="3dp"
+        android:src="@mipmap/hp_game_core_pay_dialog_selected" />
+</LinearLayout>
+

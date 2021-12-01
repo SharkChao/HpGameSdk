@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hp_game_core_secret_text">请您在使用本游戏前充分阅读<a href='https://www.hupu.com/policies/terms'>《虎扑用户协议（含隐私政策）》</a>各条款，了解我们对您个人信息的处理规则及申请权限的目的。点击“同意”按钮代表您已同意前述协议及本提示。\n\n在您使用游戏服务的过程中，我们可能会申请【系统设备权限用于安全风控、存储权限用于下载缓存相关文件。如您希望通过语音、视频、玩家互动等，我们可能申请您的麦克风、摄像头、地理位置权限】为您实现相关功能。</string>
+</resources>
