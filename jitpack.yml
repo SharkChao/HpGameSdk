@@ -1,0 +1,5 @@
+jdk:
+   -openjdk11
+install:
+  -./gradlew: lib文件夹名称:build:lib文件夹名称:publishToMavenLocal
+  -find. -name "*.aar"
