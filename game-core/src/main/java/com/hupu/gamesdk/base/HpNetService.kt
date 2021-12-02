@@ -22,7 +22,7 @@ internal object HpNetService {
         }.addInterceptor(SignInterceptor()).build()
     fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://mobilegame-sit.hupu.com")
+            .baseUrl("https://mobilegame.hupu.com")
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
