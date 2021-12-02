@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
+import com.hupu.gamesdk.base.HpLogUtil
 import com.hupu.gamesdk.certification.CertificationResult
 import com.hupu.gamesdk.certification.HpGameCertification
 import com.hupu.gamesdk.certification.HpImmaturityFragment
@@ -65,9 +66,14 @@ class HpGame private constructor(private val builder: Builder){
                         hashMap["result"] = 1
                         HpReportManager.report(HpGameConstant.REPORT_HUPU_LOGIN,hashMap)
                         HpReportManager.postHeartBeat(1)
+
+                        HpLogUtil.e("登陆成功!,${jsonObject}")
                         startCertification(activity,object :HpGameCertification.HpCertificationListener{
                            override fun success(response: CertificationResult.CertficationResponse) {
+
+                               HpLogUtil.e("实名认证成功!")
                                if (response.adult){
+                                   HpLogUtil.e("当前用户已成年")
                                    listener.success(jsonObject)
                                    val imHashMap = HashMap<String, Any?>()
                                    imHashMap["result"] = 1
@@ -79,12 +85,15 @@ class HpGame private constructor(private val builder: Builder){
                                    val imHashMap = HashMap<String, Any?>()
                                    imHashMap["result"] = 0
                                    HpReportManager.report(HpGameConstant.REPORT_IMMATURITY,imHashMap)
+                                   HpLogUtil.e("触发未成年保护机制")
                                }
                            }
 
                            override fun fail(code: Int, msg: String?) {
                                Toast.makeText(activity,msg,Toast.LENGTH_SHORT).show()
                                listener.fail(code, msg)
+
+                               HpLogUtil.e("实名认证失败!,失败原因：${msg},错误码：${code}")
                            }
                        })
                     }
@@ -97,6 +106,7 @@ class HpGame private constructor(private val builder: Builder){
                         hashMap["result"] = 0
                         hashMap["error_msg"] = msg
                         HpReportManager.report(HpGameConstant.REPORT_HUPU_LOGIN,hashMap)
+                        HpLogUtil.e("登陆失败!,失败原因：${msg},错误码：${code}")
                     }
                 })
         }
@@ -151,7 +161,7 @@ class HpGame private constructor(private val builder: Builder){
                 val hashMap = HashMap<String, Any?>()
                 hashMap["result"] = 1
                 HpReportManager.report(HpGameConstant.REPORT_INIT_RESULT,hashMap)
-
+                HpLogUtil.e("游戏sdk初始化成功!,游戏名称：${HpGameAppInfo.appName},游戏id：${HpGameAppInfo.appId}")
             }
 
             override fun fail(code: Int, msg: String?) {
@@ -161,7 +171,7 @@ class HpGame private constructor(private val builder: Builder){
                 hashMap["result"] = 0
                 hashMap["error_msg"] = msg
                 HpReportManager.report(HpGameConstant.REPORT_INIT_RESULT,hashMap)
-
+                HpLogUtil.e("游戏sdk初始化失败!,游戏id：${HpGameAppInfo.appId},失败原因：${msg},错误码：${code}")
             }
         })
         countDownLatch.await()
@@ -192,6 +202,7 @@ class HpGame private constructor(private val builder: Builder){
                 val hashMap = HashMap<String, Any?>()
                 hashMap["result"] = 1
                 HpReportManager.report(HpGameConstant.REPORT_INIT_RESULT,hashMap)
+                HpLogUtil.e("游戏sdk初始化成功!,游戏名称：${HpGameAppInfo.appName},游戏id：${HpGameAppInfo.appId}")
             }
 
             override fun fail(code: Int, msg: String?) {
@@ -201,6 +212,8 @@ class HpGame private constructor(private val builder: Builder){
                 hashMap["result"] = 0
                 hashMap["error_msg"] = msg
                 HpReportManager.report(HpGameConstant.REPORT_INIT_RESULT,hashMap)
+
+                HpLogUtil.e("游戏sdk初始化失败!,游戏id：${HpGameAppInfo.appId},失败原因：${msg},错误码：${code}")
             }
         })
     }

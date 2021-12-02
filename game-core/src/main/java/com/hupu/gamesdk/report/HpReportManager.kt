@@ -15,6 +15,9 @@ import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.login.HpLoginManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 object HpReportManager {
     private val deviceId: String by lazy {
@@ -87,12 +90,12 @@ object HpReportManager {
 
     fun report(type: String,hashMap: HashMap<String,Any?>) {
         val createReportBean = createReportBean(type, hashMap)
-        val requestBody = HPAppInfo.convertJson(
-            Gson().toJson(createReportBean))
 
+        val requestBody = HPAppInfo.convertJson(
+            Gson().toJson(createReportBean)).toRequestBody("text/plain".toMediaTypeOrNull())
         ProcessLifecycleOwner.get().lifecycle.coroutineScope.launch(Dispatchers.IO) {
             try {
-//                service.postReport(requestBody)
+                service.postReport(requestBody)
             }catch (e: Exception) {
                 e.printStackTrace()
             }

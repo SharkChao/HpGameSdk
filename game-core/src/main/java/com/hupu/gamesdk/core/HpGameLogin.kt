@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpLoadingFragment
+import com.hupu.gamesdk.base.HpLogUtil
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.login.HpLoginFragment
 import com.hupu.gamesdk.login.HpLoginManager

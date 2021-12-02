@@ -95,6 +95,10 @@ public class SignInterceptor implements Interceptor {
                     .url(commonParamsUrlBuilder.build());
             request = newRequestBuild.build();
         }
+
+        if (request == null) {
+            return chain.proceed(original);
+        }
         return chain.proceed(request);
     }
 

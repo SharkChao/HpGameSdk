@@ -86,6 +86,7 @@
         android:text="如遇可前往虎扑app-「我的」进行咨询反馈，我们将第一时间为您跟进~"
         android:textSize="14sp"
         android:textColor="#000"
+        android:visibility="gone"
         android:layout_marginBottom="50dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

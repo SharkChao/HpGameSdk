@@ -9,6 +9,6 @@ internal interface HpReportService {
     @POST("/external/antiAddiction/report")
     suspend fun postHeartBeat(@Body params: @JvmSuppressWildcards Map<String, Any?>): Response<Unit>?
 
-    @POST("/external/antiAddiction/heartbeat")
+    @POST("/hermes/report")
     suspend fun postReport(@Body json: RequestBody): Response<Unit>?
 }
