@@ -6,11 +6,11 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.coroutineScope
 import com.google.gson.Gson
-import com.hupu.gamesdk.core.HpGame
-import com.hupu.gamesdk.base.HPAppInfo
-import com.hupu.gamesdk.base.HPDeviceInfo
+import com.hupu.gamesdk.base.*
+import com.hupu.gamesdk.base.ExecutorManager
 import com.hupu.gamesdk.base.HpGameConstant
 import com.hupu.gamesdk.base.HpNetService
+import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.login.HpLoginManager
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +50,7 @@ object HpReportManager {
 
                 if (appResumeTime - appStartTime > 3000) {
                     //热启动
-                    postHeartBeat(1)
+                    postHeartBeat(1,null)
                 }
             }
 
@@ -63,7 +63,7 @@ object HpReportManager {
                 hashMap["end_time"] = System.currentTimeMillis()
                 HpReportManager.report(HpGameConstant.REPORT_PLAY_DURATION,hashMap)
 
-                postHeartBeat(0)
+                postHeartBeat(0,null)
             }
         })
     }
@@ -102,7 +102,7 @@ object HpReportManager {
         }
     }
 
-    fun postHeartBeat(type: Int) {
+    fun postHeartBeat(type: Int,callback: (()->Unit)?) {
         val userInfo = HpLoginManager.getUserInfo() ?: return
         ProcessLifecycleOwner.get().lifecycle.coroutineScope.launch(Dispatchers.IO) {
             try {
@@ -110,8 +110,15 @@ object HpReportManager {
                 hashMap["puid"] = userInfo.puid
                 hashMap["type"] = type
                 service.postHeartBeat(hashMap)
+
+                ExecutorManager.instance.mainExecutor.execute {
+                    callback?.invoke()
+                }
             }catch (e: Exception) {
                 e.printStackTrace()
+                ExecutorManager.instance.mainExecutor.execute {
+                    callback?.invoke()
+                }
             }
         }
     }

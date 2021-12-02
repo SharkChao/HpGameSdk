@@ -4,11 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.KeyEvent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import com.gyf.immersionbar.ImmersionBar
+import com.hupu.gamesdk.R
 import com.hupu.gamesdk.base.CommonUtil
 import com.hupu.gamesdk.base.HpLoadingFragment
 import com.hupu.gamesdk.databinding.HpGameCoreCertificationLayoutBinding
@@ -44,25 +48,36 @@ class HpCertificationActivity: AppCompatActivity() {
 
 
     private fun initEvent() {
-
-        binding.tvPost.setOnClickListener {
+        changeBtnState()
+        binding.tvName.doAfterTextChanged {
             if (binding.tvName.text.toString().isEmpty()){
                 binding.llName.error = "请输入用户名"
-                return@setOnClickListener
             }else {
                 binding.llName.error = ""
             }
+            changeBtnState()
+        }
 
+        binding.tvCard.doAfterTextChanged {
             if (binding.tvCard.text.toString().isEmpty()){
                 binding.llCard.error = "请输入身份证号"
-                return@setOnClickListener
-            }
-
-            if (!CommonUtil.checkIsIDCard(binding.tvCard.text.toString())) {
+            }else if (!CommonUtil.checkIsIDCard(binding.tvCard.text.toString())) {
                 binding.llCard.error = "请输入合法身份证号"
+            }else {
+                binding.llCard.error = ""
+            }
+            changeBtnState()
+        }
+
+        binding.rlBack.setOnClickListener {
+            setResult(Activity.RESULT_CANCELED)
+            finish()
+        }
+
+        binding.tvPost.setOnClickListener {
+            if(!checkParamsVaild()) {
                 return@setOnClickListener
             }
-            binding.llCard.error = ""
 
 
             val hpLoadingFragment = HpLoadingFragment()
@@ -79,6 +94,25 @@ class HpCertificationActivity: AppCompatActivity() {
                 })
         }
     }
+
+    private fun checkParamsVaild(): Boolean {
+        if (TextUtils.isEmpty(binding.tvName.text.toString()) || TextUtils.isEmpty(binding.tvCard.text.toString()) || !CommonUtil.checkIsIDCard(binding.tvCard.text.toString())) {
+            return false
+        }
+
+        return true
+    }
+
+    private fun changeBtnState() {
+        if (!checkParamsVaild()) {
+            binding.tvPost.setBackgroundResource(R.drawable.hp_game_core_dialog_btn_unselect_bg)
+            binding.tvPost.setTextColor(Color.parseColor("#89909F"))
+        }else {
+            binding.tvPost.setBackgroundResource(R.drawable.hp_game_core_dialog_btn_bg)
+            binding.tvPost.setTextColor(Color.parseColor("#FFFFFF"))
+        }
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             setResult(Activity.RESULT_CANCELED)

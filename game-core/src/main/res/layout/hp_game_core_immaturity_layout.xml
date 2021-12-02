@@ -33,6 +33,7 @@
         android:layout_width="126dp"
         android:layout_height="44dp"
         android:text="确 认"
+        android:visibility="gone"
         android:textColor="#FFFFFF"
         android:background="#D7312E"
         app:layout_constraintLeft_toLeftOf="parent"

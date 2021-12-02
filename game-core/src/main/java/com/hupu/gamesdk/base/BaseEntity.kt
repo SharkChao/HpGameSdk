@@ -15,7 +15,7 @@ internal fun <T> BaseEntity<T>?.isSuccess(): Boolean {
     if (this == null || this.code != 0 || this.data == null) {
         if (this?.code == 1003) {
             //accesstoken过期
-            HpGame.logout(null)
+            HpGame.logout()
         }
         return false
     }

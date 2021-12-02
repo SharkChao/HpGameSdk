@@ -5,8 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.marginTop
 import androidx.fragment.app.DialogFragment
 import com.hupu.gamesdk.R
+import com.hupu.gamesdk.base.HPDeviceInfo
 import com.hupu.gamesdk.databinding.HpGameCoreCertificationResultLayoutBinding
 
 class HpCertificationResultFragment: DialogFragment() {
@@ -52,6 +54,11 @@ class HpCertificationResultFragment: DialogFragment() {
             binding.tvTitle.text = "认证中"
             binding.tvDesc.text = "您的实名正在校验中,\n 预计最迟48小时结束，请耐心等待"
             binding.tvSure.visibility = View.GONE
+            binding.tvDesc.setPadding(0,0,0,HPDeviceInfo.DipToPixels(requireContext(),25))
+
+            val layoutParams = binding.tvDesc.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.topMargin =HPDeviceInfo.DipToPixels(requireContext(),30)
+            binding.tvDesc.layoutParams = layoutParams
         }
 
 

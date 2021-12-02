@@ -35,12 +35,12 @@ class HpGame private constructor(private val builder: Builder){
             startLoginFragment(activity,listener)
         }
 
-        fun logout(listener: HpGameLogin.HpLogoutListener?) {
-            HpReportManager.postHeartBeat(0)
-            HpLoginManager.clearUserInfo()
-            registerGlobalLogoutListener(listener)
-            logoutListeners.forEach {
-                it.success()
+        fun logout() {
+            HpReportManager.postHeartBeat(0) {
+                HpLoginManager.clearUserInfo()
+                logoutListeners.forEach {
+                    it.success()
+                }
             }
         }
 
@@ -65,7 +65,7 @@ class HpGame private constructor(private val builder: Builder){
                         val hashMap = HashMap<String, Any?>()
                         hashMap["result"] = 1
                         HpReportManager.report(HpGameConstant.REPORT_HUPU_LOGIN,hashMap)
-                        HpReportManager.postHeartBeat(1)
+                        HpReportManager.postHeartBeat(1,null)
 
                         HpLogUtil.e("登陆成功!,${jsonObject}")
                         startCertification(activity,object :HpGameCertification.HpCertificationListener{

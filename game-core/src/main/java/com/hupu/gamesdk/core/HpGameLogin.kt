@@ -38,6 +38,7 @@ class HpGameLogin {
                 jsonObject.put("puid",userInfo?.puid)
                 jsonObject.put("nickname",userInfo?.nickName)
                 jsonObject.put("head",userInfo?.head)
+                jsonObject.put("access_token",userInfo?.accessToken)
                 listener.success(jsonObject)
             }else {
                 val hpLoginFragment = HpLoginFragment()

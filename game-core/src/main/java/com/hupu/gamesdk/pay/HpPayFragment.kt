@@ -133,6 +133,10 @@ internal class HpPayFragment: DialogFragment() {
             val reportMap = HashMap<String, Any?>()
             reportMap["way"] = viewModel.getSelectPayItem()?.code
             reportMap["money"] = payEntity?.totalFee
+
+
+            HpLogUtil.e("支付信息：${hashMap.toString()}")
+
             viewModel.startPay(hashMap).observe(this, Observer {
                 if (it.isSuccess()) {
                     if ( viewModel.getSelectPayItem()?.code == HpPayType.ALIPAY.value) {

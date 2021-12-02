@@ -116,7 +116,7 @@
         android:layout_width="248dp"
         android:layout_height="44dp"
         android:layout_marginTop="32dp"
-        android:background="#C60100"
+        android:background="@drawable/hp_game_core_dialog_btn_bg"
         android:gravity="center"
         android:text="立即支付"
         android:textColor="#FFFFFF"

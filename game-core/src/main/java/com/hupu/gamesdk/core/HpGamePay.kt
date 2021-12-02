@@ -6,13 +6,27 @@ import androidx.fragment.app.DialogFragment
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
+import com.hupu.gamesdk.base.HpLogUtil
 import com.hupu.gamesdk.pay.HpPayFragment
 import com.hupu.gamesdk.pay.entity.HpPayEntity
 import com.hupu.gamesdk.report.HpReportManager
 
 class HpGamePay private constructor(private val hpPayEntity: HpPayEntity){
 
-    fun start(activity: AppCompatActivity,listener: HpPayListener) {
+    fun start(activity: AppCompatActivity,tempListener: HpPayListener) {
+
+        val listener = object : HpPayListener{
+            override fun success() {
+                tempListener.success()
+                HpLogUtil.e("支付成功！")
+            }
+            override fun fail(code: Int, msg: String?) {
+                tempListener.fail(code, msg)
+                HpLogUtil.e("支付失败！code:${code},msg:${msg}")
+            }
+        }
+
+
 
         val hashMap = HashMap<String, Any?>()
         HpReportManager.report(HpGameConstant.REPORT_PAY_CLICK,hashMap)
