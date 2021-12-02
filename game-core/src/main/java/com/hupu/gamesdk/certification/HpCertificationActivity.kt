@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Base64
 import android.view.KeyEvent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,11 @@ import com.hupu.gamesdk.base.CommonUtil
 import com.hupu.gamesdk.base.HpLoadingFragment
 import com.hupu.gamesdk.databinding.HpGameCoreCertificationLayoutBinding
 import com.hupu.gamesdk.login.HpLoginManager
+import java.lang.Exception
+import java.util.*
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 
 /**
  * 实名认证
@@ -121,4 +127,5 @@ class HpCertificationActivity: AppCompatActivity() {
         }
         return super.onKeyDown(keyCode, event)
     }
+
 }
