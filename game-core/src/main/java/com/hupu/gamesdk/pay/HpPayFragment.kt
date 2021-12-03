@@ -144,8 +144,9 @@ internal class HpPayFragment: DialogFragment() {
                             setViewState(ViewState.Result(result))
                             viewModel.setPayResult(result)
 
-                            reportMap["result"] = result
+                            reportMap["result"] = if (result) 1 else 0
                             reportMap["error_msg"] = if (result) "" else "支付宝接口异常"
+                            HpReportManager.report(HpGameConstant.REPORT_PAY_RESULT,reportMap)
                         }
                     }
                 }else {
