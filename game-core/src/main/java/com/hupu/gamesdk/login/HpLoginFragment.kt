@@ -82,7 +82,7 @@ internal class HpLoginFragment: DialogFragment() {
     }
 
     private fun initView() {
-        binding.tvDesc.text = if (HpLoginManager.hasLoginedBefore()) "切换账号请先至虎扑APP内操作" else "如遇问题可前往虎扑app-「我的」进行咨询反馈，我们将第一时间为您跟进~"
+        binding.tvDesc.text = if (HpLoginManager.hasLoginedBefore()) "切换账号请先至虎扑APP内操作" else "如遇问题可前往虎扑app-「我的」进行咨询反馈，我们将第一时间催促游戏方处理"
     }
 
     private fun initEvent() {

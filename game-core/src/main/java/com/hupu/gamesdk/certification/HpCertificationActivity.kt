@@ -16,6 +16,7 @@ import com.gyf.immersionbar.ImmersionBar
 import com.hupu.gamesdk.R
 import com.hupu.gamesdk.base.CommonUtil
 import com.hupu.gamesdk.base.HpLoadingFragment
+import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.databinding.HpGameCoreCertificationLayoutBinding
 import com.hupu.gamesdk.login.HpLoginManager
 import java.lang.Exception
@@ -55,6 +56,12 @@ class HpCertificationActivity: AppCompatActivity() {
 
     private fun initEvent() {
         changeBtnState()
+
+
+        binding.tvLogout.setOnClickListener {
+            HpGame.logout()
+        }
+
         binding.tvName.doAfterTextChanged {
             if (binding.tvName.text.toString().isEmpty()){
                 binding.llName.error = "请输入用户名"

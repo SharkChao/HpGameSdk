@@ -105,13 +105,13 @@
         android:gravity="center"/>
 
     <TextView
+        android:id="@+id/tv_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="如遇可前往虎扑app-「我的」进行咨询反馈，我们将第一时间为您跟进~"
-        android:textSize="14sp"
-        android:textColor="#000"
-        android:visibility="gone"
-        android:layout_marginBottom="50dp"
+        android:text="切换账号"
+        android:textSize="12sp"
+        android:textColor="#2F6EEB"
+        android:layout_marginBottom="66dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
