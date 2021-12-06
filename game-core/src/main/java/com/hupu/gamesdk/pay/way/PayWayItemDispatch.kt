@@ -1,11 +1,11 @@
 package com.hupu.gamesdk.pay.way
 
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hupu.gamesdk.R
 import com.hupu.gamesdk.base.CommonDispatchBase
@@ -25,7 +25,7 @@ internal class PayWayItemDispatch: CommonDispatchBase<HpPayItem, PayWayItemDispa
 
     override fun bindHolder(holder: PayWayItemViewHolder, data: HpPayItem, position: Int) {
        holder.tvPay.text = data.name
-       Glide.with(holder.itemView).load(data.img).into(holder.ivPay)
+       Glide.with(holder.itemView.context).load(data.img).into(holder.ivPay)
         holder.ivSelect.setImageResource(if (data.select) R.mipmap.hp_game_core_pay_dialog_selected else R.mipmap.hp_game_core_pay_dialog_unselected)
         holder.itemView.setOnClickListener {
             listener?.onItemSelect(data)

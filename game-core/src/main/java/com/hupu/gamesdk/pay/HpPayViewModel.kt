@@ -1,18 +1,21 @@
 package com.hupu.gamesdk.pay
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
 import com.hupu.gamesdk.config.HpConfigManager
 import com.hupu.gamesdk.config.HpPayItem
-import com.hupu.gamesdk.pay.entity.HpPayEntity
+import com.hupu.gamesdk.pay.entity.HpPayOrderResult
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 internal class HpPayViewModel: ViewModel() {
+    private val mainScope = MainScope()
     private val mRepository = HpPayRepository()
     private var payResult: Boolean = false
     private var payList = HpConfigManager.getConfig()?.payConfig
     private var viewState: HpPayFragment.ViewState = HpPayFragment.ViewState.Init
-
     init {
         if (!payList.isNullOrEmpty()) {
             payList?.forEach {
@@ -22,10 +25,15 @@ internal class HpPayViewModel: ViewModel() {
         }
     }
 
-    fun startPay(hashMap: HashMap<String,Any?>) = liveData{
-        mRepository.startPay(hashMap).collectLatest {
-            emit(it)
+    fun startPay(hashMap: HashMap<String,Any?>): MutableLiveData<HpPayOrderResult?> {
+        val payResultData = MutableLiveData<HpPayOrderResult?>()
+        mainScope.launch {
+            mRepository.startPay(hashMap).collectLatest {
+                payResultData.postValue(it)
+            }
         }
+
+        return payResultData
     }
 
     fun getPayList(): List<HpPayItem>? {
@@ -71,5 +79,10 @@ internal class HpPayViewModel: ViewModel() {
 
     fun getPayResult(): Boolean {
         return payResult
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        mainScope.cancel()
     }
 }

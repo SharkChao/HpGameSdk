@@ -1,25 +1,20 @@
 package com.hupu.gamesdk.report
 
+import android.arch.lifecycle.ProcessLifecycleOwner
 import android.os.Build
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.coroutineScope
 import com.google.gson.Gson
 import com.hupu.gamesdk.base.*
-import com.hupu.gamesdk.base.ExecutorManager
-import com.hupu.gamesdk.base.HpGameConstant
-import com.hupu.gamesdk.base.HpNetService
 import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.login.HpLoginManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
 object HpReportManager {
+    private val mainScope = MainScope()
     private val deviceId: String by lazy {
         HPDeviceInfo.getDeviceID(HpGame.context)
     }
@@ -37,15 +32,13 @@ object HpReportManager {
 
     private val service = HpNetService.getRetrofit().create(HpReportService::class.java)
     fun init() {
-        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object : ApplicationLifeObserver() {
 
-            override fun onCreate(owner: LifecycleOwner) {
-                super.onCreate(owner)
+            override fun onCreate() {
                 appStartTime = System.currentTimeMillis()
             }
 
-            override fun onResume(owner: LifecycleOwner) {
-                super.onResume(owner)
+            override fun onResume() {
                 appResumeTime = System.currentTimeMillis()
 
                 if (appResumeTime - appStartTime > 3000) {
@@ -54,8 +47,7 @@ object HpReportManager {
                 }
             }
 
-            override fun onPause(owner: LifecycleOwner) {
-                super.onPause(owner)
+            override fun onPause() {
 
                 val hashMap = HashMap<String, Any?>()
                 hashMap["duration"] = System.currentTimeMillis() - appResumeTime
@@ -93,7 +85,7 @@ object HpReportManager {
 
         val requestBody = HPAppInfo.convertJson(
             Gson().toJson(createReportBean)).toRequestBody("text/plain".toMediaTypeOrNull())
-        ProcessLifecycleOwner.get().lifecycle.coroutineScope.launch(Dispatchers.IO) {
+        mainScope.launch(Dispatchers.IO) {
             try {
                 service.postReport(requestBody)
             }catch (e: Exception) {
@@ -104,7 +96,7 @@ object HpReportManager {
 
     fun postHeartBeat(type: Int,callback: (()->Unit)?) {
         val userInfo = HpLoginManager.getUserInfo() ?: return
-        ProcessLifecycleOwner.get().lifecycle.coroutineScope.launch(Dispatchers.IO) {
+        mainScope.launch(Dispatchers.IO) {
             try {
                 val hashMap = HashMap<String, Any?>()
                 hashMap["puid"] = userInfo.puid

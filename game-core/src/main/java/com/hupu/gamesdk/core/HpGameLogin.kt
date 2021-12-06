@@ -1,12 +1,12 @@
 package com.hupu.gamesdk.core
 
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
+import android.support.v4.app.DialogFragment
+import android.support.v7.app.AppCompatActivity
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpLoadingFragment
-import com.hupu.gamesdk.base.HpLogUtil
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.login.HpLoginFragment
 import com.hupu.gamesdk.login.HpLoginManager
@@ -14,7 +14,7 @@ import com.hupu.gamesdk.login.HpLoginViewModel
 import org.json.JSONObject
 
 class HpGameLogin {
-    internal fun start(activity: AppCompatActivity,listener: HpLoginListener) {
+    internal fun start(activity: AppCompatActivity, listener: HpLoginListener) {
         //app不合法
         if (!HpGameAppInfo.legal) {
             listener.fail(ErrorType.AppNotLegal.code, ErrorType.AppNotLegal.msg)
@@ -29,7 +29,7 @@ class HpGameLogin {
         hpLoadingFragment.isCancelable = false
         hpLoadingFragment.show(activity.supportFragmentManager,"")
         //检测accessToken是否有效
-        val hpLoginViewModel = ViewModelProvider(activity)[HpLoginViewModel::class.java]
+        val hpLoginViewModel = ViewModelProviders.of(activity)[HpLoginViewModel::class.java]
         hpLoginViewModel.checkAccessToken().observe(activity, Observer {
             hpLoadingFragment.dismiss()
             if (it?.code?:-1 == 0) {

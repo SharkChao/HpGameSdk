@@ -1,29 +1,25 @@
 package com.hupu.gamesdk.pay
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.R
 import com.hupu.gamesdk.base.*
-import com.hupu.gamesdk.base.CommonDispatchAdapter
-import com.hupu.gamesdk.base.CommonUtil
 import com.hupu.gamesdk.base.CommonUtil.Companion.dp2px
-import com.hupu.gamesdk.base.HpGameConstant
-import com.hupu.gamesdk.base.isSuccess
 import com.hupu.gamesdk.config.HpPayItem
 import com.hupu.gamesdk.core.HpGamePay
 import com.hupu.gamesdk.databinding.HpGameCorePayDialogBinding
+import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.login.HpLoginManager
 import com.hupu.gamesdk.pay.entity.HpPayEntity
 import com.hupu.gamesdk.pay.way.PayWayItemDispatch
@@ -36,7 +32,7 @@ internal class HpPayFragment: DialogFragment() {
         const val HP_PAY_INFO_KEY = "hupu_pay_info_key"
     }
 
-    private val viewModel: HpPayViewModel by viewModels()
+    private var viewModel: HpPayViewModel? = null
     private var payEntity: HpPayEntity? = null
     private val dispatch = PayWayItemDispatch()
     private lateinit var dispatchAdapter: CommonDispatchAdapter
@@ -71,7 +67,10 @@ internal class HpPayFragment: DialogFragment() {
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     private fun initData() {
-        setViewState(viewModel.getViewState())
+
+        viewModel = ViewModelProviders.of(this).get(HpPayViewModel::class.java)
+
+        setViewState(viewModel!!.getViewState())
         payEntity = arguments?.getSerializable(HP_PAY_INFO_KEY) as HpPayEntity?
         binding.clContent.tvGameName.text = HpGameAppInfo.appName
         binding.clContent.tvProductName.text = payEntity?.productName
@@ -83,7 +82,7 @@ internal class HpPayFragment: DialogFragment() {
         binding.clContent.rvPayWay.adapter = dispatchAdapter
         binding.clContent.rvPayWay.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
         dispatchAdapter.getDataList().clear()
-        dispatchAdapter.getDataList().addAll(viewModel.getPayList()?: emptyList())
+        dispatchAdapter.getDataList().addAll(viewModel!!.getPayList()?: emptyList())
         dispatchAdapter.notifyDataSetChanged()
     }
 
@@ -95,13 +94,13 @@ internal class HpPayFragment: DialogFragment() {
         dispatch.registerOnItemSelectListener(object : PayWayItemDispatch.OnItemSelectListener{
             @SuppressLint("NotifyDataSetChanged")
             override fun onItemSelect(data: HpPayItem) {
-                viewModel.setSelectPayItem(data)
+                viewModel?.setSelectPayItem(data)
                 dispatchAdapter.notifyDataSetChanged()
             }
         })
 
         binding.clResult.tvSure.setOnClickListener {
-            if (viewModel.getPayResult()) {
+            if (viewModel?.getPayResult() == true) {
                 listener?.success()
             }else {
                 listener?.fail(ErrorType.PayFail.code,ErrorType.PayFail.msg)
@@ -110,7 +109,7 @@ internal class HpPayFragment: DialogFragment() {
         }
 
         binding.clContent.tvPay.setOnClickListener {
-            if (!viewModel.checkParams()){
+            if (viewModel?.checkParams() == false){
                 Toast.makeText(requireContext(),"支付失败，请稍后重试",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -123,26 +122,22 @@ internal class HpPayFragment: DialogFragment() {
             hashMap["desc"] = payEntity?.productDesc
             hashMap["game_trade_no"] = payEntity?.gameTradeNo
             hashMap["pay_fee"] = payEntity?.totalFee
-            hashMap["pay_way"] = viewModel.getSelectPayItem()?.code
+            hashMap["pay_way"] = viewModel?.getSelectPayItem()?.code
             hashMap["order_sign"] = payEntity?.sign
             hashMap["role_id"] = payEntity?.roleId
             hashMap["server_id"] = payEntity?.serverId
             hashMap["puid"] = HpLoginManager.getUserInfo()?.puid
-
-
-            val reportMap = HashMap<String, Any?>()
-            reportMap["way"] = viewModel.getSelectPayItem()?.code
-            reportMap["money"] = payEntity?.totalFee
-
-
             HpLogUtil.e("支付信息：${hashMap.toString()}")
 
-            viewModel.startPay(hashMap).observe(this, Observer {
+            viewModel?.startPay(hashMap)?.observe(this, Observer {
+                val reportMap = HashMap<String, Any?>()
+                reportMap["way"] = viewModel?.getSelectPayItem()?.code
+                reportMap["money"] = payEntity?.totalFee
                 if (it.isSuccess()) {
-                    if ( viewModel.getSelectPayItem()?.code == HpPayType.ALIPAY.value) {
+                    if (viewModel?.getSelectPayItem()?.code == HpPayType.ALIPAY.value) {
                         CommonUtil.alipay(requireActivity(),it?.data?.payUrl){ result->
                             setViewState(ViewState.Result(result))
-                            viewModel.setPayResult(result)
+                            viewModel?.setPayResult(result)
 
                             reportMap["result"] = if (result) 1 else 0
                             reportMap["error_msg"] = if (result) "" else "支付宝接口异常"
@@ -184,7 +179,7 @@ internal class HpPayFragment: DialogFragment() {
     }
 
     private fun setViewState(viewState: ViewState) {
-        viewModel.setViewState(viewState)
+        viewModel?.setViewState(viewState)
         when(viewState) {
              is ViewState.Init -> {
                 binding.clContent.root.visibility = View.VISIBLE

@@ -4,14 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
-import android.util.Base64
 import android.view.KeyEvent
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doAfterTextChanged
-import androidx.lifecycle.Observer
 import com.gyf.immersionbar.ImmersionBar
 import com.hupu.gamesdk.R
 import com.hupu.gamesdk.base.CommonUtil
@@ -19,11 +14,11 @@ import com.hupu.gamesdk.base.HpLoadingFragment
 import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.databinding.HpGameCoreCertificationLayoutBinding
 import com.hupu.gamesdk.login.HpLoginManager
-import java.lang.Exception
 import java.util.*
-import javax.crypto.Cipher
-import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.SecretKeySpec
+import android.arch.lifecycle.ViewModelProviders
+import android.text.Editable
+import android.text.TextWatcher
+
 
 /**
  * 实名认证
@@ -35,9 +30,10 @@ class HpCertificationActivity: AppCompatActivity() {
     }
 
 
-    private val viewModel: HpCertificationViewModel by viewModels()
+    private var viewModel: HpCertificationViewModel? = null
     private var _binding: HpGameCoreCertificationLayoutBinding? = null
     private val binding get() = _binding!!
+    private var hpLoadingFragment: HpLoadingFragment? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ImmersionBar.with(this)
@@ -50,6 +46,8 @@ class HpCertificationActivity: AppCompatActivity() {
         _binding = HpGameCoreCertificationLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        viewModel = ViewModelProviders.of(this).get(HpCertificationViewModel::class.java)
         initEvent()
     }
 
@@ -62,49 +60,69 @@ class HpCertificationActivity: AppCompatActivity() {
             HpGame.logout()
         }
 
-        binding.tvName.doAfterTextChanged {
-            if (binding.tvName.text.toString().isEmpty()){
-                binding.llName.error = "请输入用户名"
-            }else {
-                binding.llName.error = ""
-            }
-            changeBtnState()
-        }
+        binding.tvName.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
-        binding.tvCard.doAfterTextChanged {
-            if (binding.tvCard.text.toString().isEmpty()){
-                binding.llCard.error = "请输入身份证号"
-            }else if (!CommonUtil.checkIsIDCard(binding.tvCard.text.toString())) {
-                binding.llCard.error = "请输入合法身份证号"
-            }else {
-                binding.llCard.error = ""
             }
-            changeBtnState()
-        }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (binding.tvName.text.toString().isEmpty()){
+                    binding.llName.error = "请输入用户名"
+                }else {
+                    binding.llName.error = ""
+                }
+                changeBtnState()
+            }
+        })
+
+
+
+        binding.tvCard.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (binding.tvCard.text.toString().isEmpty()){
+                    binding.llCard.error = "请输入身份证号"
+                }else if (!CommonUtil.checkIsIDCard(binding.tvCard.text.toString())) {
+                    binding.llCard.error = "请输入合法身份证号"
+                }else {
+                    binding.llCard.error = ""
+                }
+                changeBtnState()
+            }
+        })
 
         binding.rlBack.setOnClickListener {
             setResult(Activity.RESULT_CANCELED)
             finish()
         }
 
+
+
         binding.tvPost.setOnClickListener {
             if(!checkParamsVaild()) {
                 return@setOnClickListener
             }
 
-
-            val hpLoadingFragment = HpLoadingFragment()
-            hpLoadingFragment.isCancelable = false
-            hpLoadingFragment.show(supportFragmentManager,"")
+            hpLoadingFragment = HpLoadingFragment()
+            hpLoadingFragment?.isCancelable = false
+            hpLoadingFragment?.show(supportFragmentManager,"")
             val userInfo = HpLoginManager.getUserInfo()
-            viewModel.postCertification(userInfo?.puid,binding.tvName.text.toString(),binding.tvCard.text.toString()).observe(this,
-                Observer {
-                    hpLoadingFragment.dismiss()
-                    val intent = Intent()
-                    intent.putExtra(CERTIFICATION_RESULT_KEY,it)
-                    setResult(Activity.RESULT_OK,intent)
-                    finish()
-                })
+            viewModel?.postCertification(userInfo?.puid,binding.tvName.text.toString(),binding.tvCard.text.toString())?.observe(this, {
+                hpLoadingFragment?.dismiss()
+                val intent = Intent()
+                intent.putExtra(CERTIFICATION_RESULT_KEY,it)
+                setResult(Activity.RESULT_OK,intent)
+                finish()
+            })
         }
     }
 

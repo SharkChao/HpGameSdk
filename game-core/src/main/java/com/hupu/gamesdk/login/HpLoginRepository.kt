@@ -1,8 +1,9 @@
 package com.hupu.gamesdk.login
 
-import android.util.Log
 import com.hupu.gamesdk.base.HpNetService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 internal class HpLoginRepository {
     private val service = HpNetService.getRetrofit().create(HpLoginService::class.java)
@@ -15,5 +16,5 @@ internal class HpLoginRepository {
             e.printStackTrace()
             emit(null)
         }
-    }
+    }.flowOn(Dispatchers.IO)
 }

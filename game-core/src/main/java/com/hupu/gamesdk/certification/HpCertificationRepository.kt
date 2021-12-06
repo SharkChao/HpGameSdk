@@ -3,7 +3,9 @@ package com.hupu.gamesdk.certification
 import android.text.TextUtils
 import android.util.Base64
 import com.hupu.gamesdk.base.HpNetService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -19,7 +21,7 @@ internal class HpCertificationRepository {
             e.printStackTrace()
             emit(null)
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
 
     fun postCertification(puid: String?,name: String?,card: String?) = flow {
@@ -34,7 +36,7 @@ internal class HpCertificationRepository {
             e.printStackTrace()
             emit(null)
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     private val key = "163381885615040118961695"
     private val initVector = "1048908077297390"

@@ -2,13 +2,13 @@ package com.hupu.gamesdk.base
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
-import androidx.fragment.app.DialogFragment
 import com.hupu.gamesdk.databinding.HpGameCoreLoadingLayoutBinding
 
 class HpLoadingFragment: DialogFragment() {

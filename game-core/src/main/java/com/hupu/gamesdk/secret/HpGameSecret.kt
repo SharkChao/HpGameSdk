@@ -1,10 +1,11 @@
 package com.hupu.gamesdk.secret
 
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
+import android.support.v4.app.DialogFragment
+import android.support.v7.app.AppCompatActivity
+
 
 class HpGameSecret {
-    fun start(activity: AppCompatActivity,listener: HpSecretListener) {
+    fun start(activity: AppCompatActivity, listener: HpSecretListener) {
         if (HpSecretManager.getSecretAgree()) {
             listener.agree()
             return

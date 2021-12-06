@@ -1,7 +1,9 @@
 package com.hupu.gamesdk.pay
 
 import com.hupu.gamesdk.base.HpNetService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 internal class HpPayRepository {
     private val service = HpNetService.getRetrofit().create(HpPayService::class.java)
@@ -14,5 +16,5 @@ internal class HpPayRepository {
             e.printStackTrace()
             emit(null)
         }
-    }
+    }.flowOn(Dispatchers.IO)
 }

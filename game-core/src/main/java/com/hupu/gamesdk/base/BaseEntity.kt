@@ -1,6 +1,6 @@
 package com.hupu.gamesdk.base
 
-import androidx.annotation.Keep
+import android.support.annotation.Keep
 import com.hupu.gamesdk.core.HpGame
 import java.io.Serializable
 

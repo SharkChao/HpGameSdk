@@ -4,67 +4,29 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
 import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.base.CommonUtil
 import com.hupu.gamesdk.base.CommonUtil.Companion.encrypt
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
+import com.hupu.gamesdk.base.activitycallback.ActResultRequest
+import com.hupu.gamesdk.base.activitycallback.ActivityCallback
 import com.hupu.gamesdk.core.HpGameLogin
 import com.hupu.gamesdk.databinding.HpGameCoreLoginDialogBinding
 import org.json.JSONObject
 
 internal class HpLoginFragment: DialogFragment() {
-    private val viewModel: HpLoginViewModel by viewModels()
     private var _binding: HpGameCoreLoginDialogBinding? = null
     private val binding get() = _binding!!
-    private var launcher: ActivityResultLauncher<Intent>? = null
     private var listener: HpGameLogin.HpLoginListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            //此处是跳转的result回调方法
-            if (it.data != null && it.resultCode == Activity.RESULT_OK) {
-                val result = it.data?.getStringExtra("data") ?: ""
-
-                val jsonObject = JSONObject(result)
-                val code = jsonObject.optInt("code")//0：用户取消授权  1：授权成功 2：授权失败
-                val jsonData = jsonObject.optJSONObject("data")
-                if (code == 1 && jsonData != null && !TextUtils.isEmpty(jsonData.optString("access_token"))) {
-                    //成功
-                    val hpUserEntity = HpUserEntity()
-                    hpUserEntity.accessToken = jsonData.optString("access_token")
-                    hpUserEntity.puid = jsonData.optString("puid")
-                    hpUserEntity.nickName = jsonData.optString("nickname")
-                    hpUserEntity.head = jsonData.optString("head")
-                    HpLoginManager.saveUserInfo(hpUserEntity)
-
-                    onLoginSuccess()
-                }else {
-                    if (code == 0) {
-                        Toast.makeText(requireContext(),jsonObject.optString("msg")?:"授权失败，请稍后重试!",Toast.LENGTH_SHORT).show()
-                        listener?.fail(ErrorType.LoginCancel.code,ErrorType.LoginCancel.msg)
-                    }else {
-                        Toast.makeText(requireContext(),jsonObject.optString("msg")?:"授权失败，请稍后重试!",Toast.LENGTH_SHORT).show()
-                        listener?.fail(ErrorType.LoginNetError.code,jsonObject.optString("msg")?:"授权失败，请稍后重试!")
-                    }
-                }
-            }else {
-                Toast.makeText(requireContext(),"授权失败，请稍后重试!",Toast.LENGTH_SHORT).show()
-                listener?.fail(ErrorType.LoginResultError.code,ErrorType.LoginResultError.msg)
-            }
-        }
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -90,10 +52,7 @@ internal class HpLoginFragment: DialogFragment() {
 
             if (CommonUtil.isAppInstalled2(requireContext(),HpGameConstant.HUPU_PACKAGE_NAME)) {
                 try {
-                    val uri = "hupugame://com.hupu.games/sign?appId=${HpGameAppInfo.appId}&appKey=${HpGameAppInfo.appKey?.encrypt()}&appIcon=${HpGameAppInfo.appIcon}&appName=${HpGameAppInfo.appName}&sdkVersion=${HpGame.sdkVersion}"
-                    val intent = Intent()
-                    intent.data = Uri.parse(uri)
-                    launcher?.launch(intent)
+                   startHpLogin()
                 }catch (e: Exception) {
                     e.printStackTrace()
                     Toast.makeText(requireContext(),"请安装最新版本虎扑后再试！",Toast.LENGTH_SHORT).show()
@@ -108,6 +67,57 @@ internal class HpLoginFragment: DialogFragment() {
         }
     }
 
+
+    private fun startHpLogin() {
+        val uri = "hupugame://com.hupu.games/sign?appId=${HpGameAppInfo.appId}&appKey=${HpGameAppInfo.appKey?.encrypt()}&appIcon=${HpGameAppInfo.appIcon}&appName=${HpGameAppInfo.appName}&sdkVersion=${HpGame.sdkVersion}"
+        val intent = Intent()
+        intent.data = Uri.parse(uri)
+
+        val actResultRequest = ActResultRequest(requireActivity())
+        actResultRequest.startForResult(intent
+        ) { resultCode, data ->
+            if (data != null && resultCode == Activity.RESULT_OK) {
+                val result = data.getStringExtra("data") ?: ""
+
+                val jsonObject = JSONObject(result)
+                val code = jsonObject.optInt("code")//0：用户取消授权  1：授权成功 2：授权失败
+                val jsonData = jsonObject.optJSONObject("data")
+                if (code == 1 && jsonData != null && !TextUtils.isEmpty(jsonData.optString("access_token"))) {
+                    //成功
+                    val hpUserEntity = HpUserEntity()
+                    hpUserEntity.accessToken = jsonData.optString("access_token")
+                    hpUserEntity.puid = jsonData.optString("puid")
+                    hpUserEntity.nickName = jsonData.optString("nickname")
+                    hpUserEntity.head = jsonData.optString("head")
+                    HpLoginManager.saveUserInfo(hpUserEntity)
+
+                    onLoginSuccess()
+                } else {
+                    if (code == 0) {
+                        Toast.makeText(
+                            requireContext(),
+                            jsonObject.optString("msg") ?: "授权失败，请稍后重试!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        listener?.fail(ErrorType.LoginCancel.code, ErrorType.LoginCancel.msg)
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            jsonObject.optString("msg") ?: "授权失败，请稍后重试!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        listener?.fail(
+                            ErrorType.LoginNetError.code,
+                            jsonObject.optString("msg") ?: "授权失败，请稍后重试!"
+                        )
+                    }
+                }
+            } else {
+                Toast.makeText(requireContext(), "授权失败，请稍后重试!", Toast.LENGTH_SHORT).show()
+                listener?.fail(ErrorType.LoginResultError.code, ErrorType.LoginResultError.msg)
+            }
+        }
+    }
 
     fun registerLoginListener(listener: HpGameLogin.HpLoginListener?) {
         this.listener = listener

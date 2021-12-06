@@ -1,9 +1,8 @@
 package com.hupu.gamesdk.base.activitycallback;
 
 import android.content.Intent;
-
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 
 public class ActResultRequest {
 

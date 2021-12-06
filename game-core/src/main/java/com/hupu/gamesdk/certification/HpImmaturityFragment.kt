@@ -3,10 +3,10 @@ package com.hupu.gamesdk.certification
 import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
 import com.hupu.gamesdk.base.CommonUtil.Companion.dp2px
 import com.hupu.gamesdk.databinding.HpGameCoreImmaturityLayoutBinding
 

@@ -1,6 +1,7 @@
 package com.hupu.gamesdk.login
 
-import androidx.annotation.Keep
+import android.support.annotation.Keep
+
 
 @Keep
 internal class HpUserEntity {

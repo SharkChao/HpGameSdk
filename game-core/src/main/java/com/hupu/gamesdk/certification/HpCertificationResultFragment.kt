@@ -1,12 +1,11 @@
 package com.hupu.gamesdk.certification
 
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.marginTop
-import androidx.fragment.app.DialogFragment
 import com.hupu.gamesdk.R
 import com.hupu.gamesdk.base.HPDeviceInfo
 import com.hupu.gamesdk.databinding.HpGameCoreCertificationResultLayoutBinding

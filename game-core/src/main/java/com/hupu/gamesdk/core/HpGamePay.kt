@@ -1,8 +1,8 @@
 package com.hupu.gamesdk.core
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
+import android.support.v4.app.DialogFragment
+import android.support.v7.app.AppCompatActivity
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
@@ -13,7 +13,7 @@ import com.hupu.gamesdk.report.HpReportManager
 
 class HpGamePay private constructor(private val hpPayEntity: HpPayEntity){
 
-    fun start(activity: AppCompatActivity,tempListener: HpPayListener) {
+    fun start(activity: AppCompatActivity, tempListener: HpPayListener) {
 
         val listener = object : HpPayListener{
             override fun success() {

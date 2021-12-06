@@ -1,6 +1,6 @@
 package com.hupu.gamesdk.login
 
-import androidx.annotation.Keep
+import android.support.annotation.Keep
 import com.hupu.gamesdk.base.BaseEntity
 
 @Keep

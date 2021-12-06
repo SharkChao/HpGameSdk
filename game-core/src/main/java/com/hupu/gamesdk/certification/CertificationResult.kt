@@ -1,6 +1,6 @@
 package com.hupu.gamesdk.certification
 
-import androidx.annotation.Keep
+import android.support.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.hupu.gamesdk.base.BaseEntity
 import java.io.Serializable

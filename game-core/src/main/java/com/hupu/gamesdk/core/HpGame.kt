@@ -2,10 +2,10 @@ package com.hupu.gamesdk.core
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.support.annotation.MainThread
+import android.support.v4.app.DialogFragment
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import androidx.annotation.MainThread
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
 import com.hupu.gamesdk.base.HpLogUtil
@@ -31,7 +31,7 @@ class HpGame private constructor(private val builder: Builder){
         private val logoutListeners = ArrayList<HpGameLogin.HpLogoutListener>()
 
 
-        fun startLogin(activity: AppCompatActivity,listener: HpGameLogin.HpLoginListener) {
+        fun startLogin(activity: AppCompatActivity, listener: HpGameLogin.HpLoginListener) {
             startLoginFragment(activity,listener)
         }
 

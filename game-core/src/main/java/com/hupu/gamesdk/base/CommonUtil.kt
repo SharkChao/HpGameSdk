@@ -5,9 +5,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.text.TextUtils
 import android.util.TypedValue
-import androidx.annotation.Dimension
-import androidx.annotation.Px
-import androidx.fragment.app.FragmentActivity
 import com.alipay.sdk.app.PayTask
 import com.hupu.gamesdk.pay.alipay.AliPayResult
 import java.text.DecimalFormat
@@ -15,6 +12,9 @@ import android.content.ActivityNotFoundException
 
 import android.content.Intent
 import android.net.Uri
+import android.support.annotation.Dimension
+import android.support.annotation.Px
+import android.support.v4.app.FragmentActivity
 import android.util.Base64
 import java.nio.charset.Charset
 import javax.crypto.Cipher
@@ -154,7 +154,7 @@ internal class CommonUtil {
         }
 
 
-        fun alipay(activity: FragmentActivity,payUrl: String?,callback: (success: Boolean) -> Unit) {
+        fun alipay(activity: FragmentActivity, payUrl: String?, callback: (success: Boolean) -> Unit) {
             if (payUrl == null) {
                 callback.invoke(false)
                 return

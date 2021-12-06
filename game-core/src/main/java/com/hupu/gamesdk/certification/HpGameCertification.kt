@@ -1,12 +1,11 @@
 package com.hupu.gamesdk.certification
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
 import com.hupu.gamesdk.base.activitycallback.ActResultRequest
@@ -21,9 +20,9 @@ internal class HpGameCertification {
             findFragmentByTag.dismiss()
         }
 
-        val viewModel = ViewModelProvider(activity)[HpCertificationViewModel::class.java]
+        val viewModel = ViewModelProviders.of(activity)[HpCertificationViewModel::class.java]
         val puid = HpLoginManager.getUserInfo()?.puid
-        viewModel.checkCertification(puid).observe(activity, Observer {
+        viewModel.checkCertification(puid).observe(activity, {
             processResult(activity,it,listener)
         })
     }

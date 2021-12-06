@@ -1,8 +1,8 @@
 package com.hupu.gamesdk.base
 
+import android.support.v7.widget.RecyclerView
 import android.util.SparseArray
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
