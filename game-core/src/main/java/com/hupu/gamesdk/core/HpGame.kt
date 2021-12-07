@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.support.annotation.MainThread
 import android.support.v4.app.DialogFragment
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.FragmentActivity
 import android.widget.Toast
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
@@ -31,7 +31,7 @@ class HpGame private constructor(private val builder: Builder){
         private val logoutListeners = ArrayList<HpGameLogin.HpLogoutListener>()
 
 
-        fun startLogin(activity: AppCompatActivity, listener: HpGameLogin.HpLoginListener) {
+        fun startLogin(activity: FragmentActivity, listener: HpGameLogin.HpLoginListener) {
             startLoginFragment(activity,listener)
         }
 
@@ -55,7 +55,7 @@ class HpGame private constructor(private val builder: Builder){
         }
 
         private fun startLoginFragment(
-            activity: AppCompatActivity,
+            activity: FragmentActivity,
             listener: HpGameLogin.HpLoginListener
         ) {
             HpGameLogin.Builder()
@@ -113,7 +113,7 @@ class HpGame private constructor(private val builder: Builder){
 
 
         private fun startCertification(
-            activity: AppCompatActivity,
+            activity: FragmentActivity,
             listener:HpGameCertification.HpCertificationListener
         ) {
             HpGameCertification.Builder()
@@ -121,7 +121,7 @@ class HpGame private constructor(private val builder: Builder){
                 .start(activity,listener)
         }
 
-        private fun showImmaturityFragment(activity: AppCompatActivity,listener:  (()->Unit)?) {
+        private fun showImmaturityFragment(activity: FragmentActivity,listener:  (()->Unit)?) {
             if (activity.isDestroyed) {
                 return
             }

@@ -1,11 +1,14 @@
 package com.hupu.gamesdk.certification
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.FragmentActivity
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.KeyEvent
 import com.gyf.immersionbar.ImmersionBar
 import com.hupu.gamesdk.R
@@ -15,15 +18,12 @@ import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.databinding.HpGameCoreCertificationLayoutBinding
 import com.hupu.gamesdk.login.HpLoginManager
 import java.util.*
-import android.arch.lifecycle.ViewModelProviders
-import android.text.Editable
-import android.text.TextWatcher
 
 
 /**
  * 实名认证
  */
-class HpCertificationActivity: AppCompatActivity() {
+class HpCertificationActivity: FragmentActivity() {
 
     companion object {
         const val CERTIFICATION_RESULT_KEY = "certification_result_key"

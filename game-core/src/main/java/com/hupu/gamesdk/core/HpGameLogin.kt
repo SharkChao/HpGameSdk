@@ -1,10 +1,9 @@
 package com.hupu.gamesdk.core
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.DialogFragment
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.FragmentActivity
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpLoadingFragment
 import com.hupu.gamesdk.init.HpGameAppInfo
@@ -14,7 +13,7 @@ import com.hupu.gamesdk.login.HpLoginViewModel
 import org.json.JSONObject
 
 class HpGameLogin {
-    internal fun start(activity: AppCompatActivity, listener: HpLoginListener) {
+    internal fun start(activity: FragmentActivity, listener: HpLoginListener) {
         //app不合法
         if (!HpGameAppInfo.legal) {
             listener.fail(ErrorType.AppNotLegal.code, ErrorType.AppNotLegal.msg)

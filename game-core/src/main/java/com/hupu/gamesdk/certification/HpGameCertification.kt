@@ -4,7 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.FragmentActivity
 import android.util.Log
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
@@ -14,7 +14,7 @@ import com.hupu.gamesdk.login.HpLoginManager
 import com.hupu.gamesdk.report.HpReportManager
 
 internal class HpGameCertification {
-    fun start(activity: AppCompatActivity, listener: HpCertificationListener) {
+    fun start(activity: FragmentActivity, listener: HpCertificationListener) {
         val findFragmentByTag = activity.supportFragmentManager.findFragmentByTag("HpCertificationResultFragment")
         if (findFragmentByTag?.isAdded == true && findFragmentByTag is DialogFragment) {
             findFragmentByTag.dismiss()
@@ -27,7 +27,7 @@ internal class HpGameCertification {
         })
     }
 
-    private fun processResult(activity: AppCompatActivity,result: CertificationResult?,listener: HpCertificationListener) {
+    private fun processResult(activity: FragmentActivity,result: CertificationResult?,listener: HpCertificationListener) {
         if (result.isSuccess()) {
             if (result?.data?.status?:-1 == 0){
                 //认证成功
@@ -61,7 +61,7 @@ internal class HpGameCertification {
         }
     }
 
-    private fun processPostResult(activity: AppCompatActivity,result: CertificationResult?,listener: HpCertificationListener) {
+    private fun processPostResult(activity: FragmentActivity,result: CertificationResult?,listener: HpCertificationListener) {
         if (result.isSuccess()) {
             if (result?.data?.status?:-1 == 0){
                 //认证成功
@@ -103,7 +103,7 @@ internal class HpGameCertification {
     }
 
 
-    private fun startCertification(activity: AppCompatActivity,listener: HpCertificationListener) {
+    private fun startCertification(activity: FragmentActivity,listener: HpCertificationListener) {
         val intent = Intent(activity, HpCertificationActivity::class.java)
         ActResultRequest(activity).startForResult(intent) { resultCode, data ->
             val result =
@@ -113,7 +113,7 @@ internal class HpGameCertification {
     }
 
 
-    private fun showResultFragment(activity: AppCompatActivity,result: CertificationType,listener:  (()->Unit)?) {
+    private fun showResultFragment(activity: FragmentActivity,result: CertificationType,listener:  (()->Unit)?) {
        if (activity.isDestroyed) {
            return
        }
