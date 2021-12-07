@@ -114,7 +114,7 @@ class HpCertificationActivity: FragmentActivity() {
 
             hpLoadingFragment = HpLoadingFragment()
             hpLoadingFragment?.isCancelable = false
-            hpLoadingFragment?.show(supportFragmentManager,"")
+            hpLoadingFragment?.show(fragmentManager,"")
             val userInfo = HpLoginManager.getUserInfo()
             viewModel?.postCertification(userInfo?.puid,binding.tvName.text.toString(),binding.tvCard.text.toString())?.observe(this, {
                 hpLoadingFragment?.dismiss()

@@ -1,19 +1,19 @@
 package com.hupu.gamesdk.base.activitycallback;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 
 public class ActResultRequest {
 
     private OnActResultEventDispatcherFragment fragment;
 
-    public ActResultRequest(FragmentActivity activity) {
+    public ActResultRequest(Activity activity) {
         fragment = getEventDispatchFragment(activity);
     }
 
-    private OnActResultEventDispatcherFragment getEventDispatchFragment(FragmentActivity activity) {
-        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
+    private OnActResultEventDispatcherFragment getEventDispatchFragment(Activity activity) {
+        FragmentManager fragmentManager = activity.getFragmentManager();
 
         OnActResultEventDispatcherFragment fragment = findEventDispatchFragment(fragmentManager);
         if (fragment == null) {

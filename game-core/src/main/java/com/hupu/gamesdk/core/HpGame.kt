@@ -1,6 +1,8 @@
 package com.hupu.gamesdk.core
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.support.annotation.MainThread
 import android.support.v4.app.DialogFragment
@@ -9,6 +11,7 @@ import android.widget.Toast
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
 import com.hupu.gamesdk.base.HpLogUtil
+import com.hupu.gamesdk.base.HupuActivityLifecycleCallbacks
 import com.hupu.gamesdk.certification.CertificationResult
 import com.hupu.gamesdk.certification.HpGameCertification
 import com.hupu.gamesdk.certification.HpImmaturityFragment
@@ -18,6 +21,7 @@ import com.hupu.gamesdk.init.HpCheckInitResult
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.login.HpLoginManager
 import com.hupu.gamesdk.report.HpReportManager
+import kotlinx.coroutines.MainScope
 import org.json.JSONObject
 import java.util.concurrent.CountDownLatch
 
@@ -31,7 +35,7 @@ class HpGame private constructor(private val builder: Builder){
         private val logoutListeners = ArrayList<HpGameLogin.HpLogoutListener>()
 
 
-        fun startLogin(activity: FragmentActivity, listener: HpGameLogin.HpLoginListener) {
+        fun startLogin(activity: Activity, listener: HpGameLogin.HpLoginListener) {
             startLoginFragment(activity,listener)
         }
 
@@ -55,7 +59,7 @@ class HpGame private constructor(private val builder: Builder){
         }
 
         private fun startLoginFragment(
-            activity: FragmentActivity,
+            activity: Activity,
             listener: HpGameLogin.HpLoginListener
         ) {
             HpGameLogin.Builder()
@@ -113,7 +117,7 @@ class HpGame private constructor(private val builder: Builder){
 
 
         private fun startCertification(
-            activity: FragmentActivity,
+            activity: Activity,
             listener:HpGameCertification.HpCertificationListener
         ) {
             HpGameCertification.Builder()
@@ -121,11 +125,11 @@ class HpGame private constructor(private val builder: Builder){
                 .start(activity,listener)
         }
 
-        private fun showImmaturityFragment(activity: FragmentActivity,listener:  (()->Unit)?) {
+        private fun showImmaturityFragment(activity: Activity,listener:  (()->Unit)?) {
             if (activity.isDestroyed) {
                 return
             }
-            val findFragmentByTag = activity.supportFragmentManager.findFragmentByTag("HpImmaturityFragment")
+            val findFragmentByTag = activity.fragmentManager.findFragmentByTag("HpImmaturityFragment")
             if (findFragmentByTag?.isAdded == true && findFragmentByTag is DialogFragment) {
                 findFragmentByTag.dismiss()
             }
@@ -133,22 +137,16 @@ class HpGame private constructor(private val builder: Builder){
             val fragment = HpImmaturityFragment()
             fragment.registerListener(listener)
             fragment.isCancelable = false
-            fragment.show(activity.supportFragmentManager,"HpImmaturityFragment")
+            fragment.show(activity.fragmentManager,"HpImmaturityFragment")
         }
     }
 
     @MainThread
     fun init(context: Context) {
         val countDownLatch = CountDownLatch(1)
-        HpGameAppInfo.appId = builder.mAppId
-        HpGameAppInfo.appKey = builder.mAppKey
-        debug = builder.mDebug
-        Companion.context = context
 
-        //初始化配置
-        HpConfigManager.initConfig()
-        //初始化埋点上报
-        HpReportManager.init()
+        initCore(context)
+
         //初始化检测
         HpCheckInitManager.checkAppLegal(object : HpCheckInitManager.HpCheckInitListener{
             override fun success(hpCheckInitResponse: HpCheckInitResult.HpCheckInitResponse) {
@@ -182,14 +180,8 @@ class HpGame private constructor(private val builder: Builder){
      */
     @MainThread
     fun initAsync(context: Context,listener: HpGameInitListener) {
+        initCore(context)
 
-        HpGameAppInfo.appId = builder.mAppId
-        HpGameAppInfo.appKey = builder.mAppKey
-        debug = builder.mDebug
-        Companion.context = context
-
-        //初始化配置
-        HpConfigManager.initConfig()
         //初始化检测
         HpCheckInitManager.checkAppLegal(object : HpCheckInitManager.HpCheckInitListener{
             override fun success(hpCheckInitResponse: HpCheckInitResult.HpCheckInitResponse) {
@@ -218,6 +210,21 @@ class HpGame private constructor(private val builder: Builder){
         })
     }
 
+    private fun initCore(context: Context) {
+        HpGameAppInfo.appId = builder.mAppId
+        HpGameAppInfo.appKey = builder.mAppKey
+        debug = builder.mDebug
+        Companion.context = context
+
+        if (context is Application) {
+            context.registerActivityLifecycleCallbacks(HupuActivityLifecycleCallbacks)
+        }
+
+        //初始化配置
+        HpConfigManager.initConfig()
+        //初始化埋点上报
+        HpReportManager.init()
+    }
 
     class Builder {
         internal var mDebug: Boolean = false

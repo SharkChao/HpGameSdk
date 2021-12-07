@@ -1,6 +1,7 @@
 package com.hupu.gamesdk.base
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.text.TextUtils
@@ -154,7 +155,7 @@ internal class CommonUtil {
         }
 
 
-        fun alipay(activity: FragmentActivity, payUrl: String?, callback: (success: Boolean) -> Unit) {
+        fun alipay(activity: Activity, payUrl: String?, callback: (success: Boolean) -> Unit) {
             if (payUrl == null) {
                 callback.invoke(false)
                 return

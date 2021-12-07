@@ -1,5 +1,6 @@
 package com.hupu.gamesdk.core
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
@@ -13,7 +14,7 @@ import com.hupu.gamesdk.report.HpReportManager
 
 class HpGamePay private constructor(private val hpPayEntity: HpPayEntity){
 
-    fun start(activity: FragmentActivity, tempListener: HpPayListener) {
+    fun start(activity: Activity, tempListener: HpPayListener) {
 
         val listener = object : HpPayListener{
             override fun success() {
@@ -37,7 +38,7 @@ class HpGamePay private constructor(private val hpPayEntity: HpPayEntity){
         }
 
 
-        val findFragmentByTag = activity.supportFragmentManager.findFragmentByTag("HpPayFragment")
+        val findFragmentByTag = activity.fragmentManager.findFragmentByTag("HpPayFragment")
         if (findFragmentByTag?.isAdded == true && findFragmentByTag is DialogFragment) {
             findFragmentByTag.dismiss()
         }
@@ -52,7 +53,7 @@ class HpGamePay private constructor(private val hpPayEntity: HpPayEntity){
         val bundle = Bundle()
         bundle.putSerializable(HpPayFragment.HP_PAY_INFO_KEY,hpPayEntity)
         hpPayFragment.arguments = bundle
-        hpPayFragment.show(activity.supportFragmentManager,"HpPayFragment")
+        hpPayFragment.show(activity.fragmentManager,"HpPayFragment")
     }
 
 

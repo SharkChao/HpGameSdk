@@ -1,33 +1,55 @@
 package com.hupu.gamesdk.certification
 
+import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentActivity
 import android.util.Log
-import com.hupu.gamesdk.base.ErrorType
+import com.hupu.gamesdk.base.*
 import com.hupu.gamesdk.base.HpGameConstant
+import com.hupu.gamesdk.base.HpNetService
 import com.hupu.gamesdk.base.activitycallback.ActResultRequest
 import com.hupu.gamesdk.base.isSuccess
 import com.hupu.gamesdk.login.HpLoginManager
 import com.hupu.gamesdk.report.HpReportManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
+import java.lang.Exception
 
 internal class HpGameCertification {
-    fun start(activity: FragmentActivity, listener: HpCertificationListener) {
-        val findFragmentByTag = activity.supportFragmentManager.findFragmentByTag("HpCertificationResultFragment")
+    private val service = HpNetService.getRetrofit().create(HpCertificationService::class.java)
+    fun start(activity: Activity, listener: HpCertificationListener) {
+        val findFragmentByTag = activity.fragmentManager.findFragmentByTag("HpCertificationResultFragment")
         if (findFragmentByTag?.isAdded == true && findFragmentByTag is DialogFragment) {
             findFragmentByTag.dismiss()
         }
 
-        val viewModel = ViewModelProviders.of(activity)[HpCertificationViewModel::class.java]
-        val puid = HpLoginManager.getUserInfo()?.puid
-        viewModel.checkCertification(puid).observe(activity, {
-            processResult(activity,it,listener)
-        })
+        HupuActivityLifecycleCallbacks.getScope(activity)?.launch {
+            try {
+                flow {
+                    try {
+                        val puid = HpLoginManager.getUserInfo()?.puid
+                        val result = service.checkCertification(puid)
+                        emit(result)
+                    }catch (e: Exception) {
+                        e.printStackTrace()
+                        emit(null)
+                    }
+                }.flowOn(Dispatchers.IO).collectLatest {
+                    processResult(activity,it,listener)
+                }
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
     }
 
-    private fun processResult(activity: FragmentActivity,result: CertificationResult?,listener: HpCertificationListener) {
+    private fun processResult(activity: Activity,result: CertificationResult?,listener: HpCertificationListener) {
         if (result.isSuccess()) {
             if (result?.data?.status?:-1 == 0){
                 //认证成功
@@ -61,7 +83,7 @@ internal class HpGameCertification {
         }
     }
 
-    private fun processPostResult(activity: FragmentActivity,result: CertificationResult?,listener: HpCertificationListener) {
+    private fun processPostResult(activity: Activity,result: CertificationResult?,listener: HpCertificationListener) {
         if (result.isSuccess()) {
             if (result?.data?.status?:-1 == 0){
                 //认证成功
@@ -103,7 +125,7 @@ internal class HpGameCertification {
     }
 
 
-    private fun startCertification(activity: FragmentActivity,listener: HpCertificationListener) {
+    private fun startCertification(activity: Activity,listener: HpCertificationListener) {
         val intent = Intent(activity, HpCertificationActivity::class.java)
         ActResultRequest(activity).startForResult(intent) { resultCode, data ->
             val result =
@@ -113,12 +135,12 @@ internal class HpGameCertification {
     }
 
 
-    private fun showResultFragment(activity: FragmentActivity,result: CertificationType,listener:  (()->Unit)?) {
+    private fun showResultFragment(activity: Activity,result: CertificationType,listener:  (()->Unit)?) {
        if (activity.isDestroyed) {
            return
        }
 
-        val findFragmentByTag = activity.supportFragmentManager.findFragmentByTag("HpCertificationResultFragment")
+        val findFragmentByTag = activity.fragmentManager.findFragmentByTag("HpCertificationResultFragment")
         if (findFragmentByTag?.isAdded == true && findFragmentByTag is DialogFragment) {
             findFragmentByTag.dismiss()
         }
@@ -129,7 +151,7 @@ internal class HpGameCertification {
         fragment.registerResultClickListener(listener)
         fragment.arguments = bundle
         fragment.isCancelable = false
-        fragment.show(activity.supportFragmentManager,"HpCertificationResultFragment")
+        fragment.show(activity.fragmentManager,"HpCertificationResultFragment")
     }
 
     class Builder {
