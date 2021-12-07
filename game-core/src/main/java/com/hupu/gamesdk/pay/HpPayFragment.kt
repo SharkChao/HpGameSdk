@@ -236,6 +236,7 @@ internal class HpPayFragment: DialogFragment() {
     }
 
     private fun setViewResult(success: Boolean) {
+        payResult = success
         binding.clResult.root.visibility = View.VISIBLE
         binding.clContent.root.visibility = View.GONE
         binding.clLoading.root.visibility = View.GONE
