@@ -20,6 +20,7 @@ import com.hupu.gamesdk.base.activitycallback.ActResultRequest
 import com.hupu.gamesdk.core.HpGameLogin
 import com.hupu.gamesdk.databinding.HpGameCoreLoginDialogBinding
 import org.json.JSONObject
+import java.net.URLEncoder
 
 internal class HpLoginFragment: DialogFragment() {
     private var _binding: HpGameCoreLoginDialogBinding? = null
@@ -68,7 +69,7 @@ internal class HpLoginFragment: DialogFragment() {
 
 
     private fun startHpLogin() {
-        val uri = "hupugame://com.hupu.games/sign?appId=${HpGameAppInfo.appId}&appKey=${HpGameAppInfo.appKey?.encrypt()}&appIcon=${HpGameAppInfo.appIcon}&appName=${HpGameAppInfo.appName}&sdkVersion=${HpGame.sdkVersion}"
+        val uri = "hupugame://com.hupu.games/sign?appId=${HpGameAppInfo.appId}&appKey=${URLEncoder.encode(HpGameAppInfo.appKey,"UTF-8")}&appIcon=${URLEncoder.encode(HpGameAppInfo.appIcon,"UTF-8")}&appName=${URLEncoder.encode(HpGameAppInfo.appName,"UTF-8")}&sdkVersion=${HpGame.sdkVersion}"
         val intent = Intent()
         intent.data = Uri.parse(uri)
 
