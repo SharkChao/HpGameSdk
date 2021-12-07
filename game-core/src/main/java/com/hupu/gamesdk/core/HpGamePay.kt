@@ -72,16 +72,20 @@ class HpGamePay private constructor(private val hpPayEntity: HpPayEntity){
         private var mRoleId: String? = null
         //区服id
         private var mServerId: String? = null
+        //puid
+        private var mPuid: String? = null
+        //appid
+        private var mAppId: String? = null
 
-        fun setProductName(name: String) = apply {
+        fun setProductName(name: String?) = apply {
             this.mProductName = name
         }
 
-        fun setProductDesc(desc: String) = apply {
+        fun setProductDesc(desc: String?) = apply {
             this.mProductDesc = desc
         }
 
-        fun setGameTradeNo(gameTradeNo: String) = apply {
+        fun setGameTradeNo(gameTradeNo: String?) = apply {
             this.mGameTradeNo = gameTradeNo
         }
 
@@ -89,17 +93,27 @@ class HpGamePay private constructor(private val hpPayEntity: HpPayEntity){
             this.mTotalFee = totalFee
         }
 
-        fun setSign(sign: String) = apply {
+        fun setSign(sign: String?) = apply {
             this.mSign = sign
+        }
+
+        fun setAppId(appid: String?) = apply {
+            this.mAppId = appid
+        }
+
+        fun setPuid(puid: String?) = apply {
+            this.mPuid = puid
         }
 
         fun setRoleId(roleId: String?) = apply {
             this.mRoleId = roleId
         }
 
-        fun setServerId(serverId: String) = apply {
+        fun setServerId(serverId: String?) = apply {
             this.mServerId = serverId
         }
+
+
 
         fun build(): HpGamePay {
             val hpPayEntity = HpPayEntity()
@@ -110,6 +124,8 @@ class HpGamePay private constructor(private val hpPayEntity: HpPayEntity){
             hpPayEntity.sign = mSign
             hpPayEntity.roleId = mRoleId
             hpPayEntity.serverId = mServerId
+            hpPayEntity.appid = mAppId
+            hpPayEntity.puid = mPuid
             return HpGamePay(hpPayEntity)
         }
     }

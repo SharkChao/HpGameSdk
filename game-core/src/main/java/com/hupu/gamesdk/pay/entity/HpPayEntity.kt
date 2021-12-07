@@ -18,4 +18,9 @@ internal class HpPayEntity: Serializable {
 
     //签名，服务端需要校验
     var sign: String? = null
+
+    //puid
+    var puid: String? = null
+    //appid
+    var appid: String? = null
 }

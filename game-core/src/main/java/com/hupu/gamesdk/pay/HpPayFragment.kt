@@ -148,7 +148,7 @@ internal class HpPayFragment: DialogFragment() {
             val selectPayCode = getSelectPayWay()?.code
 
             val hashMap = HashMap<String, Any?>()
-            hashMap["appid"] = HpGameAppInfo.appId
+            hashMap["appid"] = payEntity?.appid
             hashMap["title"] = payEntity?.productName
             hashMap["desc"] = payEntity?.productDesc
             hashMap["game_trade_no"] = payEntity?.gameTradeNo
@@ -157,7 +157,7 @@ internal class HpPayFragment: DialogFragment() {
             hashMap["order_sign"] = payEntity?.sign
             hashMap["role_id"] = payEntity?.roleId
             hashMap["server_id"] = payEntity?.serverId
-            hashMap["puid"] = HpLoginManager.getUserInfo()?.puid
+            hashMap["puid"] = payEntity?.puid
             HpLogUtil.e("支付信息：${hashMap.toString()}")
 
 
