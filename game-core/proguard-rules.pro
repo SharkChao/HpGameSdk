@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class com.hupu.gamesdk.core.** { *; }
+-keep

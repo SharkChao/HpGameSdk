@@ -6,20 +6,20 @@ import android.content.res.Configuration
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
-import com.hupu.gamesdk.R
 import com.hupu.gamesdk.base.*
 import com.hupu.gamesdk.base.CommonUtil.Companion.dp2px
 import com.hupu.gamesdk.config.HpConfigManager
 import com.hupu.gamesdk.config.HpPayItem
 import com.hupu.gamesdk.core.HpGamePay
-import com.hupu.gamesdk.databinding.HpGameCorePayDialogBinding
 import com.hupu.gamesdk.init.HpGameAppInfo
-import com.hupu.gamesdk.login.HpLoginManager
 import com.hupu.gamesdk.pay.entity.HpPayEntity
 import com.hupu.gamesdk.pay.way.PayWayItemDispatch
 import com.hupu.gamesdk.report.HpReportManager
@@ -44,19 +44,45 @@ internal class HpPayFragment: DialogFragment() {
 
     private val dispatch = PayWayItemDispatch()
     private lateinit var dispatchAdapter: CommonDispatchAdapter
-    private var _binding: HpGameCorePayDialogBinding? = null
-    private val binding get() = _binding!!
     private var listener: HpGamePay.HpPayListener? = null
     private val mainScope = MainScope()
     private val service = HpNetService.getRetrofit().create(HpPayService::class.java)
-
+    private lateinit var tvGameName: TextView
+    private lateinit var tvProductName: TextView
+    private lateinit var tvMoney: TextView
+    private lateinit var rvPayWay: RecyclerView
+    private lateinit var ivClose: ImageView
+    private lateinit var tvSure: TextView
+    private lateinit var tvPay: TextView
+    private lateinit var clContent: View
+    private lateinit var clResult: View
+    private lateinit var clLoading: View
+    private lateinit var tvStatus: TextView
+    private lateinit var ivStatus: ImageView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = HpGameCorePayDialogBinding.inflate(inflater, container, false)
-        return binding.root
+        val v = inflater.inflate(
+            ReflectUtil.getLayoutId(activity, "hp_game_core_pay_dialog"),
+            container,
+            false
+        )
+
+        tvGameName = v.findViewById(ReflectUtil.getViewId(activity,"tv_game_name"))
+        tvProductName = v.findViewById(ReflectUtil.getViewId(activity,"tv_product_name"))
+        tvMoney = v.findViewById(ReflectUtil.getViewId(activity,"tv_money"))
+        rvPayWay = v.findViewById(ReflectUtil.getViewId(activity,"rv_pay_way"))
+        ivClose = v.findViewById(ReflectUtil.getViewId(activity,"iv_close"))
+        tvSure = v.findViewById(ReflectUtil.getViewId(activity,"tv_sure"))
+        tvPay = v.findViewById(ReflectUtil.getViewId(activity,"tv_pay"))
+        clContent = v.findViewById(ReflectUtil.getViewId(activity,"cl_content"))
+        clResult = v.findViewById(ReflectUtil.getViewId(activity,"cl_result"))
+        clLoading = v.findViewById(ReflectUtil.getViewId(activity,"cl_loading"))
+        tvStatus = v.findViewById(ReflectUtil.getViewId(activity,"tv_status"))
+        ivStatus = v.findViewById(ReflectUtil.getViewId(activity,"iv_status"))
+        return v
     }
 
     override fun onStart() {
@@ -79,15 +105,15 @@ internal class HpPayFragment: DialogFragment() {
     private fun initData() {
         setViewInit()
         initPay()
-        binding.clContent.tvGameName.text = HpGameAppInfo.appName
-        binding.clContent.tvProductName.text = payEntity?.productName
-        binding.clContent.tvMoney.text = "${CommonUtil.fenToYuan(payEntity?.totalFee?:0)}元"
+        tvGameName.text = HpGameAppInfo.appName
+        tvProductName.text = payEntity?.productName
+        tvMoney.text = "${CommonUtil.fenToYuan(payEntity?.totalFee?:0)}元"
 
         dispatchAdapter = CommonDispatchAdapter.Builder()
             .registerDispatcher(dispatch)
             .build()
-        binding.clContent.rvPayWay.adapter = dispatchAdapter
-        binding.clContent.rvPayWay.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false)
+        rvPayWay.adapter = dispatchAdapter
+        rvPayWay.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false)
         dispatchAdapter.getDataList().clear()
         dispatchAdapter.getDataList().addAll(payList?: emptyList())
         dispatchAdapter.notifyDataSetChanged()
@@ -122,7 +148,7 @@ internal class HpPayFragment: DialogFragment() {
     }
 
     private fun initEvent() {
-        binding.clContent.ivClose.setOnClickListener {
+        ivClose.setOnClickListener {
             dismiss()
         }
 
@@ -134,7 +160,7 @@ internal class HpPayFragment: DialogFragment() {
             }
         })
 
-        binding.clResult.tvSure.setOnClickListener {
+        tvSure.setOnClickListener {
             if (payResult) {
                 listener?.success()
             }else {
@@ -143,7 +169,7 @@ internal class HpPayFragment: DialogFragment() {
             dismiss()
         }
 
-        binding.clContent.tvPay.setOnClickListener {
+        tvPay.setOnClickListener {
             setViewLoading()
             val selectPayCode = getSelectPayWay()?.code
 
@@ -225,27 +251,27 @@ internal class HpPayFragment: DialogFragment() {
     }
 
     private fun setViewInit() {
-        binding.clContent.root.visibility = View.VISIBLE
-        binding.clLoading.root.visibility = View.GONE
-        binding.clResult.root.visibility = View.GONE
+        clContent.visibility = View.VISIBLE
+        clLoading.visibility = View.GONE
+        clResult.visibility = View.GONE
     }
     private fun setViewLoading() {
-        binding.clLoading.root.visibility = View.VISIBLE
-        binding.clContent.root.visibility = View.GONE
-        binding.clResult.root.visibility = View.GONE
+        clLoading.visibility = View.VISIBLE
+        clContent.visibility = View.GONE
+        clResult.visibility = View.GONE
     }
 
     private fun setViewResult(success: Boolean) {
         payResult = success
-        binding.clResult.root.visibility = View.VISIBLE
-        binding.clContent.root.visibility = View.GONE
-        binding.clLoading.root.visibility = View.GONE
+        clResult.visibility = View.VISIBLE
+        clContent.visibility = View.GONE
+        clLoading.visibility = View.GONE
         if (success) {
-            binding.clResult.tvStatus.text = "支付成功"
-            binding.clResult.ivStatus.setImageResource(R.mipmap.hp_game_core_pay_dialog_success_icon)
+            tvStatus.text = "支付成功"
+            ivStatus.setImageResource(ReflectUtil.getMipmapId(activity,"hp_game_core_pay_dialog_success_icon"))
         }else {
-            binding.clResult.tvStatus.text = "支付失败"
-            binding.clResult.ivStatus.setImageResource(R.mipmap.hp_game_core_pay_dialog_fail_icon)
+            tvStatus.text = "支付失败"
+            ivStatus.setImageResource(ReflectUtil.getMipmapId(activity,"hp_game_core_pay_dialog_fail_icon"))
         }
     }
 

@@ -9,19 +9,24 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
-import com.hupu.gamesdk.databinding.HpGameCoreLoadingLayoutBinding
+import android.widget.ImageView
 
 class HpLoadingFragment: DialogFragment() {
 
-    private var _binding: HpGameCoreLoadingLayoutBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var ivLoading: ImageView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = HpGameCoreLoadingLayoutBinding.inflate(inflater, container, false)
-        return binding.root
+        val v = inflater.inflate(
+            ReflectUtil.getLayoutId(activity, "hp_game_core_loading_layout"),
+            container,
+            false
+        )
+
+        ivLoading = v.findViewById(ReflectUtil.getViewId(activity,"iv_loading"))
+        return v
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,7 +36,7 @@ class HpLoadingFragment: DialogFragment() {
 
     override fun dismiss() {
         super.dismiss()
-        binding.ivLoading.clearAnimation()
+        ivLoading.clearAnimation()
     }
 
     private fun startLoading() {
@@ -45,7 +50,7 @@ class HpLoadingFragment: DialogFragment() {
             repeatCount = -1
         }
 
-        binding.ivLoading.animation = animation
+        ivLoading.animation = animation
         animation.start()
     }
 }

@@ -5,17 +5,20 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.TextInputEditText
+import android.support.design.widget.TextInputLayout
 import android.support.v4.app.FragmentActivity
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.KeyEvent
+import android.widget.RelativeLayout
+import android.widget.TextView
 import com.gyf.immersionbar.ImmersionBar
-import com.hupu.gamesdk.R
 import com.hupu.gamesdk.base.CommonUtil
 import com.hupu.gamesdk.base.HpLoadingFragment
+import com.hupu.gamesdk.base.ReflectUtil
 import com.hupu.gamesdk.core.HpGame
-import com.hupu.gamesdk.databinding.HpGameCoreCertificationLayoutBinding
 import com.hupu.gamesdk.login.HpLoginManager
 import java.util.*
 
@@ -31,9 +34,14 @@ class HpCertificationActivity: FragmentActivity() {
 
 
     private var viewModel: HpCertificationViewModel? = null
-    private var _binding: HpGameCoreCertificationLayoutBinding? = null
-    private val binding get() = _binding!!
     private var hpLoadingFragment: HpLoadingFragment? = null
+    private lateinit var tvLogout: TextView
+    private lateinit var tvName: TextInputEditText
+    private lateinit var tvCard: TextInputEditText
+    private lateinit var llName: TextInputLayout
+    private lateinit var llCard: TextInputLayout
+    private lateinit var rlBack: RelativeLayout
+    private lateinit var tvPost: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ImmersionBar.with(this)
@@ -42,10 +50,13 @@ class HpCertificationActivity: FragmentActivity() {
             .statusBarDarkFont(true)
             .init()
 
-
-        _binding = HpGameCoreCertificationLayoutBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
+        setContentView(ReflectUtil.getLayoutId(this,"hp_game_core_certification_layout"))
+        tvLogout = findViewById(ReflectUtil.getViewId(this,"tv_logout"))
+        tvName = findViewById(ReflectUtil.getViewId(this,"tv_name"))
+        llName = findViewById(ReflectUtil.getViewId(this,"ll_name"))
+        llCard = findViewById(ReflectUtil.getViewId(this,"ll_card"))
+        rlBack = findViewById(ReflectUtil.getViewId(this,"rl_back"))
+        tvPost = findViewById(ReflectUtil.getViewId(this,"tv_post"))
 
         viewModel = ViewModelProviders.of(this).get(HpCertificationViewModel::class.java)
         initEvent()
@@ -56,11 +67,11 @@ class HpCertificationActivity: FragmentActivity() {
         changeBtnState()
 
 
-        binding.tvLogout.setOnClickListener {
+        tvLogout.setOnClickListener {
             HpGame.logout()
         }
 
-        binding.tvName.addTextChangedListener(object : TextWatcher{
+        tvName.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
@@ -69,10 +80,10 @@ class HpCertificationActivity: FragmentActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (binding.tvName.text.toString().isEmpty()){
-                    binding.llName.error = "请输入用户名"
+                if (tvName.text.toString().isEmpty()){
+                    llName.error = "请输入用户名"
                 }else {
-                    binding.llName.error = ""
+                    llName.error = ""
                 }
                 changeBtnState()
             }
@@ -80,7 +91,7 @@ class HpCertificationActivity: FragmentActivity() {
 
 
 
-        binding.tvCard.addTextChangedListener(object : TextWatcher{
+        tvCard.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
@@ -89,25 +100,25 @@ class HpCertificationActivity: FragmentActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (binding.tvCard.text.toString().isEmpty()){
-                    binding.llCard.error = "请输入身份证号"
-                }else if (!CommonUtil.checkIsIDCard(binding.tvCard.text.toString())) {
-                    binding.llCard.error = "请输入合法身份证号"
+                if (tvCard.text.toString().isEmpty()){
+                    llCard.error = "请输入身份证号"
+                }else if (!CommonUtil.checkIsIDCard(tvCard.text.toString())) {
+                    llCard.error = "请输入合法身份证号"
                 }else {
-                    binding.llCard.error = ""
+                    llCard.error = ""
                 }
                 changeBtnState()
             }
         })
 
-        binding.rlBack.setOnClickListener {
+        rlBack.setOnClickListener {
             setResult(Activity.RESULT_CANCELED)
             finish()
         }
 
 
 
-        binding.tvPost.setOnClickListener {
+        tvPost.setOnClickListener {
             if(!checkParamsVaild()) {
                 return@setOnClickListener
             }
@@ -116,7 +127,7 @@ class HpCertificationActivity: FragmentActivity() {
             hpLoadingFragment?.isCancelable = false
             hpLoadingFragment?.show(fragmentManager,"")
             val userInfo = HpLoginManager.getUserInfo()
-            viewModel?.postCertification(userInfo?.puid,binding.tvName.text.toString(),binding.tvCard.text.toString())?.observe(this, {
+            viewModel?.postCertification(userInfo?.puid,tvName.text.toString(),tvCard.text.toString())?.observe(this, {
                 hpLoadingFragment?.dismiss()
                 val intent = Intent()
                 intent.putExtra(CERTIFICATION_RESULT_KEY,it)
@@ -127,7 +138,7 @@ class HpCertificationActivity: FragmentActivity() {
     }
 
     private fun checkParamsVaild(): Boolean {
-        if (TextUtils.isEmpty(binding.tvName.text.toString()) || TextUtils.isEmpty(binding.tvCard.text.toString()) || !CommonUtil.checkIsIDCard(binding.tvCard.text.toString())) {
+        if (TextUtils.isEmpty(tvName.text.toString()) || TextUtils.isEmpty(tvCard.text.toString()) || !CommonUtil.checkIsIDCard(tvCard.text.toString())) {
             return false
         }
 
@@ -136,11 +147,11 @@ class HpCertificationActivity: FragmentActivity() {
 
     private fun changeBtnState() {
         if (!checkParamsVaild()) {
-            binding.tvPost.setBackgroundResource(R.drawable.hp_game_core_dialog_btn_unselect_bg)
-            binding.tvPost.setTextColor(Color.parseColor("#89909F"))
+            tvPost.setBackgroundResource(ReflectUtil.getDrawableId(this,"hp_game_core_dialog_btn_unselect_bg"))
+            tvPost.setTextColor(Color.parseColor("#89909F"))
         }else {
-            binding.tvPost.setBackgroundResource(R.drawable.hp_game_core_dialog_btn_bg)
-            binding.tvPost.setTextColor(Color.parseColor("#FFFFFF"))
+            tvPost.setBackgroundResource(ReflectUtil.getDrawableId(this,"hp_game_core_dialog_btn_bg"))
+            tvPost.setTextColor(Color.parseColor("#FFFFFF"))
         }
     }
 

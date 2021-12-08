@@ -9,31 +9,37 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
-import com.hupu.gamesdk.core.HpGame
-import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.base.CommonUtil
-import com.hupu.gamesdk.base.CommonUtil.Companion.encrypt
 import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
+import com.hupu.gamesdk.base.ReflectUtil
 import com.hupu.gamesdk.base.activitycallback.ActResultRequest
+import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.core.HpGameLogin
-import com.hupu.gamesdk.databinding.HpGameCoreLoginDialogBinding
+import com.hupu.gamesdk.init.HpGameAppInfo
 import org.json.JSONObject
 import java.net.URLEncoder
 
 internal class HpLoginFragment: DialogFragment() {
-    private var _binding: HpGameCoreLoginDialogBinding? = null
-    private val binding get() = _binding!!
     private var listener: HpGameLogin.HpLoginListener? = null
-
+    private lateinit var tvDesc: TextView
+    private lateinit var tvLogin: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = HpGameCoreLoginDialogBinding.inflate(inflater, container, false)
-        return binding.root
+        val v = inflater.inflate(
+            ReflectUtil.getLayoutId(activity, "hp_game_core_login_dialog"),
+            container,
+            false
+        )
+
+        tvDesc = v.findViewById(ReflectUtil.getViewId(activity,"tv_desc"))
+        tvLogin = v.findViewById(ReflectUtil.getViewId(activity,"tv_login"))
+        return v
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,11 +50,11 @@ internal class HpLoginFragment: DialogFragment() {
     }
 
     private fun initView() {
-        binding.tvDesc.text = if (HpLoginManager.hasLoginedBefore()) "切换账号请先至虎扑APP内操作" else "如遇问题可前往虎扑app-「我的」进行咨询反馈，我们将第一时间催促游戏方处理"
+        tvDesc.text = if (HpLoginManager.hasLoginedBefore()) "切换账号请先至虎扑APP内操作" else "如遇问题可前往虎扑app-「我的」进行咨询反馈，我们将第一时间催促游戏方处理"
     }
 
     private fun initEvent() {
-        binding.tvLogin.setOnClickListener {
+        tvLogin.setOnClickListener {
 
             if (CommonUtil.isAppInstalled2(activity,HpGameConstant.HUPU_PACKAGE_NAME)) {
                 try {

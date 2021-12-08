@@ -6,27 +6,38 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.hupu.gamesdk.R
+import android.widget.ImageView
+import android.widget.TextView
 import com.hupu.gamesdk.base.HPDeviceInfo
-import com.hupu.gamesdk.databinding.HpGameCoreCertificationResultLayoutBinding
+import com.hupu.gamesdk.base.ReflectUtil
 
 class HpCertificationResultFragment: DialogFragment() {
 
     companion object {
         const val KEY_RESULT_TYPE = "key_result_type"
     }
-
-
-    private var _binding: HpGameCoreCertificationResultLayoutBinding? = null
-    private val binding get() = _binding!!
     private var listener:  (()->Unit)? = null
+    private lateinit var tvTitle: TextView
+    private lateinit var tvDesc: TextView
+    private lateinit var tvSure: TextView
+    private lateinit var ivStatus: ImageView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = HpGameCoreCertificationResultLayoutBinding.inflate(inflater, container, false)
-        return binding.root
+        val v = inflater.inflate(
+            ReflectUtil.getLayoutId(activity, "hp_game_core_certification_result_layout"),
+            container,
+            false
+        )
+
+        tvTitle = v.findViewById(ReflectUtil.getViewId(activity,"tv_title"))
+        tvDesc = v.findViewById(ReflectUtil.getViewId(activity,"tv_desc"))
+        tvSure = v.findViewById(ReflectUtil.getViewId(activity,"tv_sure"))
+        ivStatus = v.findViewById(ReflectUtil.getViewId(activity,"iv_status"))
+        return v
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,32 +48,32 @@ class HpCertificationResultFragment: DialogFragment() {
     private fun initView() {
         val result = arguments?.getInt(KEY_RESULT_TYPE)
         if (result == CertificationType.SUCCESS.code) {
-            binding.ivStatus.setImageResource(R.mipmap.hp_game_core_certification_result_success)
-            binding.tvTitle.text = "认证成功"
-            binding.tvDesc.text = "恭喜您完成了认证"
-            binding.tvSure.text = "确 认"
-            binding.tvSure.visibility = View.VISIBLE
+            ivStatus.setImageResource(ReflectUtil.getMipmapId(activity,"hp_game_core_certification_result_success"))
+            tvTitle.text = "认证成功"
+            tvDesc.text = "恭喜您完成了认证"
+            tvSure.text = "确 认"
+            tvSure.visibility = View.VISIBLE
         }else if (result == CertificationType.FAIL.code) {
-            binding.ivStatus.setImageResource(R.mipmap.hp_game_core_certification_result_fail)
-            binding.tvTitle.text = "认证失败"
-            binding.tvDesc.text = "请再次提交正确的信息验证"
-            binding.tvSure.text = "重 试"
-            binding.tvSure.visibility = View.VISIBLE
+            ivStatus.setImageResource(ReflectUtil.getMipmapId(activity,"hp_game_core_certification_result_fail"))
+            tvTitle.text = "认证失败"
+            tvDesc.text = "请再次提交正确的信息验证"
+            tvSure.text = "重 试"
+            tvSure.visibility = View.VISIBLE
         }else {
-            binding.ivStatus.setImageResource(R.mipmap.hp_game_core_certification_result_processing)
-            binding.tvTitle.text = "认证中"
-            binding.tvDesc.text = "您的实名正在校验中,\n 预计最迟48小时结束，请耐心等待"
-            binding.tvSure.visibility = View.GONE
-            binding.tvDesc.setPadding(0,0,0,HPDeviceInfo.DipToPixels(activity,25))
+            ivStatus.setImageResource(ReflectUtil.getMipmapId(activity,"hp_game_core_certification_result_processing"))
+            tvTitle.text = "认证中"
+            tvDesc.text = "您的实名正在校验中,\n 预计最迟48小时结束，请耐心等待"
+            tvSure.visibility = View.GONE
+            tvDesc.setPadding(0,0,0,HPDeviceInfo.DipToPixels(activity,25))
 
-            val layoutParams = binding.tvDesc.layoutParams as ViewGroup.MarginLayoutParams
+            val layoutParams = tvDesc.layoutParams as ViewGroup.MarginLayoutParams
             layoutParams.topMargin =HPDeviceInfo.DipToPixels(activity,30)
-            binding.tvDesc.layoutParams = layoutParams
+            tvDesc.layoutParams = layoutParams
         }
 
 
 
-        binding.tvSure.setOnClickListener {
+        tvSure.setOnClickListener {
             listener?.invoke()
             dismiss()
         }

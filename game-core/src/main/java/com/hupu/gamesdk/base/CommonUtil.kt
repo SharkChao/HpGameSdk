@@ -3,21 +3,18 @@ package com.hupu.gamesdk.base
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
-import android.text.TextUtils
-import android.util.TypedValue
-import com.alipay.sdk.app.PayTask
-import com.hupu.gamesdk.pay.alipay.AliPayResult
-import java.text.DecimalFormat
-import android.content.ActivityNotFoundException
-
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.support.annotation.Dimension
 import android.support.annotation.Px
-import android.support.v4.app.FragmentActivity
+import android.text.TextUtils
 import android.util.Base64
+import android.util.TypedValue
+import com.alipay.sdk.app.PayTask
+import com.hupu.gamesdk.pay.alipay.AliPayResult
 import java.nio.charset.Charset
+import java.text.DecimalFormat
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec

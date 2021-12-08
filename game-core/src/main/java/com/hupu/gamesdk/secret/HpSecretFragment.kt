@@ -8,22 +8,32 @@ import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.hupu.gamesdk.base.CommonUtil
 import com.hupu.gamesdk.base.CommonUtil.Companion.dp2px
+import com.hupu.gamesdk.base.ReflectUtil
 import com.hupu.gamesdk.databinding.HpGameCoreSecretDialogBinding
 
 internal class HpSecretFragment: DialogFragment() {
-
-    private var _binding: HpGameCoreSecretDialogBinding? = null
-    private val binding get() = _binding!!
     private var listener: HpGameSecret.HpSecretListener? = null
+    private lateinit var tvContent: TextView
+    private lateinit var tvAgree: TextView
+    private lateinit var tvReject: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = HpGameCoreSecretDialogBinding.inflate(inflater, container, false)
-        return binding.root
+        val v = inflater.inflate(
+            ReflectUtil.getLayoutId(requireContext(), "hp_game_core_secret_dialog"),
+            container,
+            false
+        )
+        tvContent = v.findViewById(ReflectUtil.getViewId(requireContext(),"tv_content"))
+        tvAgree = v.findViewById(ReflectUtil.getViewId(requireContext(),"tv_agree"))
+        tvReject = v.findViewById(ReflectUtil.getViewId(requireContext(),"tv_reject"))
+
+        return v
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,14 +51,14 @@ internal class HpSecretFragment: DialogFragment() {
     }
 
     private fun initView() {
-        binding.tvContent.movementMethod = LinkMovementMethod.getInstance()
-        binding.tvAgree.setOnClickListener {
+        tvContent.movementMethod = LinkMovementMethod.getInstance()
+        tvAgree.setOnClickListener {
             HpSecretManager.saveSecretAgree(true)
             listener?.agree()
             dismiss()
         }
 
-        binding.tvReject.setOnClickListener {
+        tvReject.setOnClickListener {
             HpSecretManager.saveSecretAgree(false)
             listener?.reject()
         }

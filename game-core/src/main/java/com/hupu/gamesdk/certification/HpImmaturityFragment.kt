@@ -7,24 +7,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.hupu.gamesdk.base.CommonUtil.Companion.dp2px
-import com.hupu.gamesdk.databinding.HpGameCoreImmaturityLayoutBinding
+import com.hupu.gamesdk.base.ReflectUtil
 
 /**
  * 未成年防沉迷
  */
 internal class HpImmaturityFragment: DialogFragment() {
 
-    private var _binding: HpGameCoreImmaturityLayoutBinding? = null
-    private val binding get() = _binding!!
     private var listener: (()->Unit)? = null
+    private lateinit var tvSure: TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = HpGameCoreImmaturityLayoutBinding.inflate(inflater, container, false)
-        return binding.root
+        val v = inflater.inflate(
+            ReflectUtil.getLayoutId(activity, "hp_game_core_immaturity_layout"),
+            container,
+            false
+        )
+
+        tvSure = v.findViewById(ReflectUtil.getViewId(activity,"tv_sure"))
+        return v
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +48,7 @@ internal class HpImmaturityFragment: DialogFragment() {
     }
 
     private fun initView() {
-        binding.tvSure.setOnClickListener {
+        tvSure.setOnClickListener {
             listener?.invoke()
         }
     }
