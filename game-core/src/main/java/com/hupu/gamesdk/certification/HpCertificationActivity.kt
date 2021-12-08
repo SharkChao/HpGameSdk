@@ -57,6 +57,7 @@ class HpCertificationActivity: FragmentActivity() {
         llCard = findViewById(ReflectUtil.getViewId(this,"ll_card"))
         rlBack = findViewById(ReflectUtil.getViewId(this,"rl_back"))
         tvPost = findViewById(ReflectUtil.getViewId(this,"tv_post"))
+        tvCard = findViewById(ReflectUtil.getViewId(this,"tv_card"))
 
         viewModel = ViewModelProviders.of(this).get(HpCertificationViewModel::class.java)
         initEvent()
