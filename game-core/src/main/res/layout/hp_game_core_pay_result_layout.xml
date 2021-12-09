@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
@@ -13,9 +13,7 @@
         android:id="@+id/tv_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+       android:layout_centerHorizontal="true"
         android:textSize="15sp"
         android:textColor="#000000" />
 
@@ -23,19 +21,17 @@
         android:id="@+id/iv_status"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@mipmap/hp_game_core_pay_dialog_success_icon"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_status"
+        android:src="@drawable/hp_game_core_pay_dialog_success_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tv_status"
         android:layout_marginTop="50dp"/>
 
     <TextView
         android:id="@+id/tv_sure"
         android:layout_width="248dp"
         android:layout_height="44dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_status"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/iv_status"
         android:layout_marginTop="52dp"
         android:text="确定"
         android:gravity="center"
@@ -43,4 +39,4 @@
         android:background="@drawable/hp_game_core_dialog_btn_bg"
         android:textColor="#FFFFFF"/>
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

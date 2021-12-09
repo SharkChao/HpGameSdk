@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
 import com.hupu.gamesdk.base.HPDeviceInfo
@@ -32,7 +33,8 @@ class HpCertificationResultFragment: DialogFragment() {
             container,
             false
         )
-
+        //添加这一行
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         tvTitle = v.findViewById(ReflectUtil.getViewId(activity,"tv_title"))
         tvDesc = v.findViewById(ReflectUtil.getViewId(activity,"tv_desc"))
         tvSure = v.findViewById(ReflectUtil.getViewId(activity,"tv_sure"))
@@ -48,19 +50,19 @@ class HpCertificationResultFragment: DialogFragment() {
     private fun initView() {
         val result = arguments?.getInt(KEY_RESULT_TYPE)
         if (result == CertificationType.SUCCESS.code) {
-            ivStatus.setImageResource(ReflectUtil.getMipmapId(activity,"hp_game_core_certification_result_success"))
+            ivStatus.setImageResource(ReflectUtil.getDrawableId(activity,"hp_game_core_certification_result_success"))
             tvTitle.text = "认证成功"
             tvDesc.text = "恭喜您完成了认证"
             tvSure.text = "确 认"
             tvSure.visibility = View.VISIBLE
         }else if (result == CertificationType.FAIL.code) {
-            ivStatus.setImageResource(ReflectUtil.getMipmapId(activity,"hp_game_core_certification_result_fail"))
+            ivStatus.setImageResource(ReflectUtil.getDrawableId(activity,"hp_game_core_certification_result_fail"))
             tvTitle.text = "认证失败"
             tvDesc.text = "请再次提交正确的信息验证"
             tvSure.text = "重 试"
             tvSure.visibility = View.VISIBLE
         }else {
-            ivStatus.setImageResource(ReflectUtil.getMipmapId(activity,"hp_game_core_certification_result_processing"))
+            ivStatus.setImageResource(ReflectUtil.getDrawableId(activity,"hp_game_core_certification_result_processing"))
             tvTitle.text = "认证中"
             tvDesc.text = "您的实名正在校验中,\n 预计最迟48小时结束，请耐心等待"
             tvSure.visibility = View.GONE

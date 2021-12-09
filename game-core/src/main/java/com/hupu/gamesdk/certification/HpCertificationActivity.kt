@@ -12,8 +12,10 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.KeyEvent
+import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.gyf.immersionbar.ImmersionBar
 import com.hupu.gamesdk.base.CommonUtil
 import com.hupu.gamesdk.base.HpLoadingFragment
@@ -36,10 +38,8 @@ class HpCertificationActivity: FragmentActivity() {
     private var viewModel: HpCertificationViewModel? = null
     private var hpLoadingFragment: HpLoadingFragment? = null
     private lateinit var tvLogout: TextView
-    private lateinit var tvName: TextInputEditText
-    private lateinit var tvCard: TextInputEditText
-    private lateinit var llName: TextInputLayout
-    private lateinit var llCard: TextInputLayout
+    private lateinit var tvName: EditText
+    private lateinit var tvCard: EditText
     private lateinit var rlBack: RelativeLayout
     private lateinit var tvPost: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,8 +53,6 @@ class HpCertificationActivity: FragmentActivity() {
         setContentView(ReflectUtil.getLayoutId(this,"hp_game_core_certification_layout"))
         tvLogout = findViewById(ReflectUtil.getViewId(this,"tv_logout"))
         tvName = findViewById(ReflectUtil.getViewId(this,"tv_name"))
-        llName = findViewById(ReflectUtil.getViewId(this,"ll_name"))
-        llCard = findViewById(ReflectUtil.getViewId(this,"ll_card"))
         rlBack = findViewById(ReflectUtil.getViewId(this,"rl_back"))
         tvPost = findViewById(ReflectUtil.getViewId(this,"tv_post"))
         tvCard = findViewById(ReflectUtil.getViewId(this,"tv_card"))
@@ -81,11 +79,6 @@ class HpCertificationActivity: FragmentActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (tvName.text.toString().isEmpty()){
-                    llName.error = "请输入用户名"
-                }else {
-                    llName.error = ""
-                }
                 changeBtnState()
             }
         })
@@ -101,13 +94,6 @@ class HpCertificationActivity: FragmentActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                if (tvCard.text.toString().isEmpty()){
-                    llCard.error = "请输入身份证号"
-                }else if (!CommonUtil.checkIsIDCard(tvCard.text.toString())) {
-                    llCard.error = "请输入合法身份证号"
-                }else {
-                    llCard.error = ""
-                }
                 changeBtnState()
             }
         })
@@ -121,6 +107,11 @@ class HpCertificationActivity: FragmentActivity() {
 
         tvPost.setOnClickListener {
             if(!checkParamsVaild()) {
+                if (TextUtils.isEmpty(tvName.text.toString())) {
+                    Toast.makeText(this,"请输入真实姓名",Toast.LENGTH_SHORT).show()
+                }else if (TextUtils.isEmpty(tvCard.text.toString()) || !CommonUtil.checkIsIDCard(tvCard.text.toString())) {
+                    Toast.makeText(this,"请输入合法身份证号码",Toast.LENGTH_SHORT).show()
+                 }
                 return@setOnClickListener
             }
 

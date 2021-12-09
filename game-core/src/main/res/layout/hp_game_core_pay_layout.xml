@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,9 +12,8 @@
         android:id="@+id/iv_close"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:src="@mipmap/hp_game_core_pay_dialog_close"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:src="@drawable/hp_game_core_pay_dialog_close"
+        android:layout_alignParentRight="true" />
 
     <TextView
         android:id="@+id/tv_game_name_tag"
@@ -24,22 +23,19 @@
         android:text="游戏名称:"
         android:textColor="@color/hp_game_core_pay_dialog_tag_color"
         android:textSize="13sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_close" />
+        android:layout_below="@id/iv_close" />
 
     <TextView
         android:id="@+id/tv_game_name"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="16dp"
         android:text="数码宝贝：重新崛起"
         android:textColor="@color/hp_game_core_pay_dialog_content_color"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@id/tv_game_name_tag"
-        app:layout_constraintLeft_toRightOf="@id/tv_game_name_tag"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_game_name_tag" />
+        android:layout_alignTop="@id/tv_game_name_tag"
+        android:layout_toRightOf="@id/tv_game_name_tag" />
 
     <TextView
         android:id="@+id/tv_product_name_tag"
@@ -49,8 +45,7 @@
         android:text="商品名称:"
         android:textColor="@color/hp_game_core_pay_dialog_tag_color"
         android:textSize="13sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_game_name_tag" />
+        android:layout_below="@id/tv_game_name_tag" />
 
     <TextView
         android:id="@+id/tv_product_name"
@@ -60,9 +55,8 @@
         android:text="月卡"
         android:textColor="@color/hp_game_core_pay_dialog_content_color"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@id/tv_product_name_tag"
-        app:layout_constraintLeft_toRightOf="@id/tv_product_name_tag"
-        app:layout_constraintTop_toTopOf="@id/tv_product_name_tag" />
+        android:layout_alignTop="@id/tv_product_name_tag"
+        android:layout_toRightOf="@id/tv_product_name_tag" />
 
     <TextView
         android:id="@+id/tv_money_tag"
@@ -72,8 +66,7 @@
         android:text="支付金额:"
         android:textColor="@color/hp_game_core_pay_dialog_tag_color"
         android:textSize="13sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_product_name_tag" />
+        android:layout_below="@id/tv_product_name_tag" />
 
     <TextView
         android:id="@+id/tv_money"
@@ -83,9 +76,8 @@
         android:text="58.8元"
         android:textColor="@color/hp_game_core_pay_dialog_content_color"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@id/tv_money_tag"
-        app:layout_constraintLeft_toRightOf="@id/tv_money_tag"
-        app:layout_constraintTop_toTopOf="@id/tv_money_tag" />
+        android:layout_alignTop="@id/tv_money_tag"
+        android:layout_toRightOf="@id/tv_money_tag" />
 
     <TextView
         android:id="@+id/tv_pay_type_tag"
@@ -95,18 +87,15 @@
         android:text="支付方式:"
         android:textColor="@color/hp_game_core_pay_dialog_tag_color"
         android:textSize="13sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_money_tag" />
+       android:layout_below="@id/tv_money_tag" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_pay_way"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@id/tv_pay_type_tag"
-        app:layout_constraintLeft_toRightOf="@id/tv_pay_type_tag"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_pay_type_tag">
+        android:layout_alignTop="@id/tv_pay_type_tag"
+        android:layout_toRightOf="@id/tv_pay_type_tag">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -121,7 +110,6 @@
         android:text="立即支付"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_pay_type_tag" />
-</android.support.constraint.ConstraintLayout>
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tv_pay_type_tag" />
+</RelativeLayout>

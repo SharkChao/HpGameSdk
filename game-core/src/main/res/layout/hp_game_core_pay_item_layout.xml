@@ -11,7 +11,7 @@
         android:id="@+id/iv_pay"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@mipmap/hp_game_core_pay_dialog_alipay" />
+        android:src="@drawable/hp_game_core_pay_dialog_alipay" />
 
     <TextView
         android:id="@+id/tv_pay"
@@ -26,6 +26,6 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginLeft="6dp"
-        android:src="@mipmap/hp_game_core_pay_dialog_selected" />
+        android:src="@drawable/hp_game_core_pay_dialog_selected" />
 </LinearLayout>
 

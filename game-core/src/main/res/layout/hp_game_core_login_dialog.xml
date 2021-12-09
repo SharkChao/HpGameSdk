@@ -10,7 +10,7 @@
         android:scaleType="centerCrop"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:background="@mipmap/hp_game_core_bg_icon"/>
+        android:background="@drawable/hp_game_core_bg_icon"/>
     <TextView
         android:id="@+id/tv_tip"
         android:layout_width="wrap_content"

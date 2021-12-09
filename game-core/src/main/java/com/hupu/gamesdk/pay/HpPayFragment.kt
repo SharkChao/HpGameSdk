@@ -7,10 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -69,6 +66,8 @@ internal class HpPayFragment: DialogFragment() {
             container,
             false
         )
+        //添加这一行
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         tvGameName = v.findViewById(ReflectUtil.getViewId(activity,"tv_game_name"))
         tvProductName = v.findViewById(ReflectUtil.getViewId(activity,"tv_product_name"))
@@ -268,10 +267,10 @@ internal class HpPayFragment: DialogFragment() {
         clLoading.visibility = View.GONE
         if (success) {
             tvStatus.text = "支付成功"
-            ivStatus.setImageResource(ReflectUtil.getMipmapId(activity,"hp_game_core_pay_dialog_success_icon"))
+            ivStatus.setImageResource(ReflectUtil.getDrawableId(activity,"hp_game_core_pay_dialog_success_icon"))
         }else {
             tvStatus.text = "支付失败"
-            ivStatus.setImageResource(ReflectUtil.getMipmapId(activity,"hp_game_core_pay_dialog_fail_icon"))
+            ivStatus.setImageResource(ReflectUtil.getDrawableId(activity,"hp_game_core_pay_dialog_fail_icon"))
         }
     }
 

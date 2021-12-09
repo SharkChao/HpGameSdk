@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
 import com.hupu.gamesdk.base.CommonUtil
@@ -36,7 +37,8 @@ internal class HpLoginFragment: DialogFragment() {
             container,
             false
         )
-
+        //添加这一行
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         tvDesc = v.findViewById(ReflectUtil.getViewId(activity,"tv_desc"))
         tvLogin = v.findViewById(ReflectUtil.getViewId(activity,"tv_login"))
         return v

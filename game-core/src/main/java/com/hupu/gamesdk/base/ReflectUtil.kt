@@ -25,9 +25,6 @@ object ReflectUtil {
         return id
     }
 
-    fun getMipmapId(context: Context, name: String): Int {
-        return getResourceId(context, name, "mipmap")
-    }
 
     fun getViewId(context: Context, name: String): Int {
         return getResourceId(context, name, "id")

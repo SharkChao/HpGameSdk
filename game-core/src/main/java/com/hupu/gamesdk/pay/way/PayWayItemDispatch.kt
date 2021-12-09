@@ -26,7 +26,7 @@ internal class PayWayItemDispatch: CommonDispatchBase<HpPayItem, PayWayItemDispa
     override fun bindHolder(holder: PayWayItemViewHolder, data: HpPayItem, position: Int) {
        holder.tvPay.text = data.name
        Glide.with(holder.itemView.context).load(data.img).into(holder.ivPay)
-        holder.ivSelect.setImageResource(if (data.select) ReflectUtil.getMipmapId(holder.itemView.context,"hp_game_core_pay_dialog_selected") else ReflectUtil.getMipmapId(holder.itemView.context,"hp_game_core_pay_dialog_unselected"))
+        holder.ivSelect.setImageResource(if (data.select) ReflectUtil.getDrawableId(holder.itemView.context,"hp_game_core_pay_dialog_selected") else ReflectUtil.getDrawableId(holder.itemView.context,"hp_game_core_pay_dialog_unselected"))
         holder.itemView.setOnClickListener {
             listener?.onItemSelect(data)
         }

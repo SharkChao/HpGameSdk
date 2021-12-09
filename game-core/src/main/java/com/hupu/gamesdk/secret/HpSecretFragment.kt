@@ -8,6 +8,7 @@ import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.TextView
 import com.hupu.gamesdk.base.CommonUtil
 import com.hupu.gamesdk.base.CommonUtil.Companion.dp2px
@@ -29,6 +30,8 @@ internal class HpSecretFragment: DialogFragment() {
             container,
             false
         )
+        //添加这一行
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         tvContent = v.findViewById(ReflectUtil.getViewId(requireContext(),"tv_content"))
         tvAgree = v.findViewById(ReflectUtil.getViewId(requireContext(),"tv_agree"))
         tvReject = v.findViewById(ReflectUtil.getViewId(requireContext(),"tv_reject"))
