@@ -14,9 +14,7 @@
     <com.hupu.gamesdk.base.ProgressWheel
         android:id="@+id/progress_bar"
         android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:matProg_barColor="#B42127"
-        app:matProg_progressIndeterminate="true" />
+        android:layout_height="100dp" />
 
     <TextView
         android:layout_width="wrap_content"

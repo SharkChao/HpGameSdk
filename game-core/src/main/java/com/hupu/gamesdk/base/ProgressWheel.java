@@ -3,6 +3,7 @@ package com.hupu.gamesdk.base;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
@@ -79,8 +80,7 @@ public class ProgressWheel extends View {
      */
     public ProgressWheel(Context context, AttributeSet attrs) {
         super(context, attrs);
-        parseAttributes(context.obtainStyledAttributes(attrs,
-                ReflectUtil.INSTANCE.getStyleableIntArray(context,"ProgressWheel")));
+        parseAttributes();
     }
 
     /**
@@ -203,40 +203,16 @@ public class ProgressWheel extends View {
     /**
      * Parse the attributes passed to the view from the XML
      *
-     * @param a the attributes to parse
      */
-    private void parseAttributes(TypedArray a) {
+    private void parseAttributes() {
         // We transform the default values from DIP to pixels
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
         barWidth = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, barWidth, metrics);
         rimWidth = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rimWidth, metrics);
         circleRadius = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, circleRadius, metrics);
 
-        circleRadius = (int) a.getDimension(ReflectUtil.INSTANCE.getStyleableFieldId(getContext(),"ProgressWheel","matProg_circleRadius"), circleRadius);
-
-        fillRadius = a.getBoolean(ReflectUtil.INSTANCE.getStyleableFieldId(getContext(),"ProgressWheel","matProg_fillRadius"), false);
-
-        barWidth = (int) a.getDimension(ReflectUtil.INSTANCE.getStyleableFieldId(getContext(),"ProgressWheel","matProg_barWidth"), barWidth);
-
-        rimWidth = (int) a.getDimension(ReflectUtil.INSTANCE.getStyleableFieldId(getContext(),"ProgressWheel","matProg_rimWidth"), rimWidth);
-
-        float baseSpinSpeed = a.getFloat(ReflectUtil.INSTANCE.getStyleableFieldId(getContext(),"ProgressWheel","matProg_spinSpeed"), spinSpeed / 360.0f);
-        spinSpeed = baseSpinSpeed * 360;
-
-        barSpinCycleTime = a.getInt(ReflectUtil.INSTANCE.getStyleableFieldId(getContext(),"ProgressWheel","matProg_barSpinCycleTime"), (int) barSpinCycleTime);
-
-        barColor = a.getColor(ReflectUtil.INSTANCE.getStyleableFieldId(getContext(),"ProgressWheel","matProg_barColor"), barColor);
-
-        rimColor = a.getColor(ReflectUtil.INSTANCE.getStyleableFieldId(getContext(),"ProgressWheel","matProg_rimColor"), rimColor);
-
-        linearProgress = a.getBoolean(ReflectUtil.INSTANCE.getStyleableFieldId(getContext(),"ProgressWheel","matProg_linearProgress"), false);
-
-        if (a.getBoolean(ReflectUtil.INSTANCE.getStyleableFieldId(getContext(),"ProgressWheel","matProg_progressIndeterminate"), false)) {
-            spin();
-        }
-
-        // Recycle
-        a.recycle();
+        barColor = Color.parseColor("#B42127");
+        spin();
     }
 
     public void setCallback(ProgressCallback progressCallback) {

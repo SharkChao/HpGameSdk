@@ -1,7 +1,6 @@
 package com.hupu.gamesdk.base
 
 import android.content.Context
-import java.lang.reflect.Field
 
 
 /**
@@ -88,53 +87,5 @@ object ReflectUtil {
             e.printStackTrace()
         }
         return null
-    }
-    fun getStyleableIntArray(context: Context, name: String?): IntArray? {
-        try {
-            val fields: Array<Field> =
-                Class.forName(context.packageName + ".R\$styleable").fields //.与$ difference,$表示R的子类
-            for (field in fields) {
-                if (field.name.equals(name)) {
-                    return field.get(null) as IntArray?
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
-    }
-    /**
-     * 遍历R类得到styleable数组资源下的子资源，1.先找到R类下的styleable子类，2.遍历styleable类获得字段值
-     *
-     * @param context
-     * @param styleableName
-     * @param styleableFieldName
-     * @return
-     */
-    fun getStyleableFieldId(
-        context: Context,
-        styleableName: String,
-        styleableFieldName: String
-    ): Int {
-        val className = context.packageName + ".R"
-        val type = "styleable"
-        val name = styleableName + "_" + styleableFieldName
-        try {
-            val cla = Class.forName(className)
-            for (childClass in cla.classes) {
-                val simpleName = childClass.simpleName
-                if (simpleName == type) {
-                    for (field in childClass.fields) {
-                        val fieldName = field.name
-                        if (fieldName == name) {
-                            return field[null] as Int
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return 0
     }
 }
