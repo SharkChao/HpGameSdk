@@ -62,7 +62,7 @@
         android:textColorHint="#CED2D9"
         android:hint="请填写真实姓名"/>
 
-    <android.support.design.widget.TextInputEditText
+    <EditText
         android:id="@+id/tv_card"
         android:layout_alignLeft="@id/tv_desc"
         android:layout_alignRight="@id/tv_desc"
