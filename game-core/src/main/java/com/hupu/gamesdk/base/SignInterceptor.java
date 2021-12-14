@@ -73,8 +73,7 @@ public class SignInterceptor implements Interceptor {
                             RequestBody newBody = RequestBody.create(body.contentType(), jsonObject.toString());
                             requestBuilder.post(newBody);
                             request = requestBuilder.build();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        } catch (Exception e) {
                         }
                     }
 

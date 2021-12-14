@@ -63,20 +63,25 @@ object HpReportManager {
 
     private fun createReportBean(type: String,hashMap: HashMap<String,Any?>): HpReportEntity {
         val hpReportEntity = HpReportEntity()
-        hpReportEntity.os = "Android"
-        hpReportEntity.osv = Build.VERSION.RELEASE
-        hpReportEntity.sv = HpGame.sdkVersion.toString()
-        hpReportEntity.av = versionName
-        hpReportEntity.aid = HpGameAppInfo.appId
-        hpReportEntity.puid = HpLoginManager.getUserInfo()?.puid
-        hpReportEntity.clt = deviceId
-        hpReportEntity.mfrs = Build.BRAND
-        hpReportEntity.model = Build.MODEL
-        hpReportEntity.tz = timeZone
-        hpReportEntity.et = System.currentTimeMillis()
 
-        hpReportEntity.type = type
-        hpReportEntity.pdata = hashMap
+        try {
+            hpReportEntity.os = "Android"
+            hpReportEntity.osv = Build.VERSION.RELEASE
+            hpReportEntity.sv = HpGame.sdkVersion.toString()
+            hpReportEntity.av = versionName
+            hpReportEntity.aid = HpGameAppInfo.appId
+            hpReportEntity.puid = HpLoginManager.getUserInfo()?.puid
+            hpReportEntity.clt = deviceId
+            hpReportEntity.mfrs = Build.BRAND
+            hpReportEntity.model = Build.MODEL
+            hpReportEntity.tz = timeZone
+            hpReportEntity.et = System.currentTimeMillis()
+
+            hpReportEntity.type = type
+            hpReportEntity.pdata = hashMap
+        }catch (e: Exception) {
+            e.printStackTrace()
+        }
         return hpReportEntity
     }
 
