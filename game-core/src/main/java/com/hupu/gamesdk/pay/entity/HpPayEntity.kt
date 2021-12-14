@@ -1,7 +1,9 @@
 package com.hupu.gamesdk.pay.entity
 
+import android.support.annotation.Keep
 import java.io.Serializable
 
+@Keep
 internal class HpPayEntity: Serializable {
     //商品名称
     var productName: String? = null

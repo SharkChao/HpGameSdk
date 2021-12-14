@@ -63,33 +63,39 @@ object HpReportManager {
 
     private fun createReportBean(type: String,hashMap: HashMap<String,Any?>): HpReportEntity {
         val hpReportEntity = HpReportEntity()
+        hpReportEntity.os = "Android"
+        hpReportEntity.osv = Build.VERSION.RELEASE
+        hpReportEntity.sv = HpGame.sdkVersion.toString()
+        hpReportEntity.av = versionName
+        hpReportEntity.aid = HpGameAppInfo.appId
+        hpReportEntity.puid = HpLoginManager.getUserInfo()?.puid
+        hpReportEntity.clt = deviceId
+        hpReportEntity.mfrs = Build.BRAND
+        hpReportEntity.model = Build.MODEL
+        hpReportEntity.tz = timeZone
+        hpReportEntity.et = System.currentTimeMillis()
 
-        try {
-            hpReportEntity.os = "Android"
-            hpReportEntity.osv = Build.VERSION.RELEASE
-            hpReportEntity.sv = HpGame.sdkVersion.toString()
-            hpReportEntity.av = versionName
-            hpReportEntity.aid = HpGameAppInfo.appId
-            hpReportEntity.puid = HpLoginManager.getUserInfo()?.puid
-            hpReportEntity.clt = deviceId
-            hpReportEntity.mfrs = Build.BRAND
-            hpReportEntity.model = Build.MODEL
-            hpReportEntity.tz = timeZone
-            hpReportEntity.et = System.currentTimeMillis()
-
-            hpReportEntity.type = type
-            hpReportEntity.pdata = hashMap
-        }catch (e: Exception) {
-            e.printStackTrace()
-        }
+        hpReportEntity.type = type
+        hpReportEntity.pdata = hashMap
         return hpReportEntity
     }
 
     fun report(type: String,hashMap: HashMap<String,Any?>) {
+        HpLogUtil.e("开始埋点上报,type:${type}")
         val createReportBean = createReportBean(type, hashMap)
 
-        val requestBody = HPAppInfo.convertJson(
-            Gson().toJson(createReportBean)).toRequestBody("text/plain".toMediaTypeOrNull())
+        HpLogUtil.e("开始埋点上报,data:${createReportBean.toString()}")
+
+        val toJson = Gson().toJson(createReportBean)
+
+        HpLogUtil.e("开始埋点上报,json:${toJson}")
+
+        val convertJson = HPAppInfo.convertJson(toJson)
+
+        HpLogUtil.e("开始埋点上报,convertJson:${convertJson}")
+        val requestBody = convertJson.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        HpLogUtil.e("开始埋点上报,requestBody:${requestBody.contentLength()}")
         mainScope.launch(Dispatchers.IO) {
             try {
                 service.postReport(requestBody)

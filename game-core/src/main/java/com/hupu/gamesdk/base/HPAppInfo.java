@@ -72,9 +72,11 @@ public class HPAppInfo {
             os.close();
 
             String result = new String(Base64Coder.encode(compressed));
+            HpLogUtil.Companion.e("开始埋点上报,result:" + result);
             return result;
         }catch (Exception e){
             e.printStackTrace();
+            HpLogUtil.Companion.e("开始埋点上报,异常:" + e.getMessage());
         }
         return "";
     }

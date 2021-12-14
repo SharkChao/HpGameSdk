@@ -1,5 +1,8 @@
 package com.hupu.gamesdk.report
 
+import android.support.annotation.Keep
+
+@Keep
 class HpReportEntity {
     //设备平台(IOS/Android)
     var os: String? = null
@@ -30,4 +33,9 @@ class HpReportEntity {
     var type: String? = null
     //业务数据
     var pdata: HashMap<String,Any?>? = null
+    override fun toString(): String {
+        return "HpReportEntity(os=$os, osv=$osv, sv=$sv, av=$av, aid=$aid, puid=$puid, clt=$clt, mfrs=$mfrs, model=$model, tz=$tz, et=$et, type=$type, pdata=$pdata)"
+    }
+
+
 }
