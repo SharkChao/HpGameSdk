@@ -81,21 +81,10 @@ object HpReportManager {
     }
 
     fun report(type: String,hashMap: HashMap<String,Any?>) {
-        HpLogUtil.e("开始埋点上报,type:${type}")
         val createReportBean = createReportBean(type, hashMap)
-
-        HpLogUtil.e("开始埋点上报,data:${createReportBean.toString()}")
-
         val toJson = Gson().toJson(createReportBean)
-
-        HpLogUtil.e("开始埋点上报,json:${toJson}")
-
         val convertJson = HPAppInfo.convertJson(toJson)
-
-        HpLogUtil.e("开始埋点上报,convertJson:${convertJson}")
         val requestBody = convertJson.toRequestBody("text/plain".toMediaTypeOrNull())
-
-        HpLogUtil.e("开始埋点上报,requestBody:${requestBody.contentLength()}")
         mainScope.launch(Dispatchers.IO) {
             try {
                 service.postReport(requestBody)
