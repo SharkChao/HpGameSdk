@@ -128,6 +128,9 @@ internal class HpGameCertification {
     private fun startCertification(activity: Activity,listener: HpCertificationListener) {
         val intent = Intent(activity, HpCertificationActivity::class.java)
         ActResultRequest(activity).startForResult(intent) { resultCode, data ->
+            if (resultCode == HpCertificationActivity.LOGOUT_OUT) {
+                return@startForResult
+            }
             val result =
                 data?.getSerializableExtra(HpCertificationActivity.CERTIFICATION_RESULT_KEY)
             processPostResult(activity, result as CertificationResult?,listener)

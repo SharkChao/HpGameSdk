@@ -32,6 +32,7 @@ class HpCertificationActivity: FragmentActivity() {
 
     companion object {
         const val CERTIFICATION_RESULT_KEY = "certification_result_key"
+        const val LOGOUT_OUT = 100
     }
 
 
@@ -68,6 +69,8 @@ class HpCertificationActivity: FragmentActivity() {
 
         tvLogout.setOnClickListener {
             HpGame.logout()
+            setResult(LOGOUT_OUT)
+            finish()
         }
 
         tvName.addTextChangedListener(object : TextWatcher{
