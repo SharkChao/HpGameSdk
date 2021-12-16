@@ -183,7 +183,7 @@ internal class HpPayFragment: DialogFragment() {
             hashMap["role_id"] = payEntity?.roleId
             hashMap["server_id"] = payEntity?.serverId
             hashMap["puid"] = payEntity?.puid
-            HpLogUtil.e("支付信息：${hashMap.toString()}")
+            HpLogUtil.e("HpPayFragment:支付信息：${hashMap.toString()}")
 
 
 

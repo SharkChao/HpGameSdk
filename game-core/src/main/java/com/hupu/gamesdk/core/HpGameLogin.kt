@@ -2,10 +2,8 @@ package com.hupu.gamesdk.core
 
 import android.app.Activity
 import android.support.v4.app.DialogFragment
-import com.hupu.gamesdk.base.ErrorType
-import com.hupu.gamesdk.base.HpLoadingFragment
+import com.hupu.gamesdk.base.*
 import com.hupu.gamesdk.base.HpNetService
-import com.hupu.gamesdk.base.HupuActivityLifecycleCallbacks
 import com.hupu.gamesdk.init.HpGameAppInfo
 import com.hupu.gamesdk.login.HpLoginFragment
 import com.hupu.gamesdk.login.HpLoginManager
@@ -22,14 +20,20 @@ class HpGameLogin {
     private val service = HpNetService.getRetrofit().create(HpLoginService::class.java)
     internal fun start(activity: Activity, listener: HpLoginListener) {
         //app不合法
+        HpLogUtil.e("HpGameLogin:开始登陆")
         if (!HpGameAppInfo.legal) {
+            HpLogUtil.e("HpGameLogin:开始登陆,但app非法")
             listener.fail(ErrorType.AppNotLegal.code, ErrorType.AppNotLegal.msg)
+            return
+        }
+        if (activity.isDestroyed) {
             return
         }
         val findFragmentByTag = activity.fragmentManager.findFragmentByTag("HpLoginFragment")
         if (findFragmentByTag?.isAdded == true && findFragmentByTag is DialogFragment) {
             findFragmentByTag.dismiss()
         }
+
 
         val hpLoadingFragment = HpLoadingFragment()
         hpLoadingFragment.isCancelable = false
@@ -50,6 +54,9 @@ class HpGameLogin {
                 }.flowOn(Dispatchers.IO).collectLatest {
                     hpLoadingFragment.dismiss()
                     if (it?.code?:-1 == 0) {
+
+                        HpLogUtil.e("HpGameLogin:checkAccessToken成功")
+
                         val jsonObject = JSONObject()
                         val userInfo = HpLoginManager.getUserInfo()
                         jsonObject.put("puid",userInfo?.puid)
@@ -58,6 +65,8 @@ class HpGameLogin {
                         jsonObject.put("access_token",userInfo?.accessToken)
                         listener.success(jsonObject)
                     }else {
+                        HpLogUtil.e("HpGameLogin:checkAccessToken失败，唤起登陆框")
+
                         val hpLoginFragment = HpLoginFragment()
                         hpLoginFragment.registerLoginListener(listener)
                         hpLoginFragment.isCancelable = false

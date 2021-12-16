@@ -40,7 +40,9 @@ class HpGame private constructor(private val builder: Builder){
         }
 
         fun logout() {
+            HpLogUtil.e("HpGame-logout-start")
             HpReportManager.postHeartBeat(0) {
+                HpLogUtil.e("HpGame-logout-success")
                 HpLoginManager.clearUserInfo()
                 logoutListeners.forEach {
                     it.success()
@@ -71,11 +73,8 @@ class HpGame private constructor(private val builder: Builder){
                         HpReportManager.report(HpGameConstant.REPORT_HUPU_LOGIN,hashMap)
                         HpReportManager.postHeartBeat(1,null)
 
-                        HpLogUtil.e("登陆成功!,${jsonObject}")
                         startCertification(activity,object :HpGameCertification.HpCertificationListener{
                            override fun success(response: CertificationResult.CertficationResponse) {
-
-                               HpLogUtil.e("实名认证成功!")
                                if (response.adult){
                                    HpLogUtil.e("当前用户已成年")
                                    listener.success(jsonObject)
@@ -146,7 +145,7 @@ class HpGame private constructor(private val builder: Builder){
         val countDownLatch = CountDownLatch(1)
 
         initCore(context)
-
+        HpLogUtil.e("HpGame-init-start")
         //初始化检测
         HpCheckInitManager.checkAppLegal(object : HpCheckInitManager.HpCheckInitListener{
             override fun success(hpCheckInitResponse: HpCheckInitResult.HpCheckInitResponse) {
@@ -181,7 +180,7 @@ class HpGame private constructor(private val builder: Builder){
     @MainThread
     fun initAsync(context: Context,listener: HpGameInitListener) {
         initCore(context)
-
+        HpLogUtil.e("HpGame-initAsync-start")
         //初始化检测
         HpCheckInitManager.checkAppLegal(object : HpCheckInitManager.HpCheckInitListener{
             override fun success(hpCheckInitResponse: HpCheckInitResult.HpCheckInitResponse) {

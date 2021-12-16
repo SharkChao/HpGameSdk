@@ -24,6 +24,11 @@ import java.lang.Exception
 internal class HpGameCertification {
     private val service = HpNetService.getRetrofit().create(HpCertificationService::class.java)
     fun start(activity: Activity, listener: HpCertificationListener) {
+        HpLogUtil.e("HpGameCertification:开始实名认证")
+        if (activity.isDestroyed) {
+            return
+        }
+
         val findFragmentByTag = activity.fragmentManager.findFragmentByTag("HpCertificationResultFragment")
         if (findFragmentByTag?.isAdded == true && findFragmentByTag is DialogFragment) {
             findFragmentByTag.dismiss()
@@ -53,12 +58,14 @@ internal class HpGameCertification {
         if (result.isSuccess()) {
             if (result?.data?.status?:-1 == 0){
                 //认证成功
+                HpLogUtil.e("HpGameCertification:实名认证成功")
                 listener.success(result?.data!!)
                 val hashMap = HashMap<String, Any?>()
                 hashMap["result"] = 1
                 HpReportManager.report(HpGameConstant.REPORT_CERTIFICATION,hashMap)
             }else if (result?.data?.status?:-1 == 1) {
                 //认证中
+                HpLogUtil.e("HpGameCertification:实名认证处理中")
                 showResultFragment(activity,CertificationType.PROCESSING,null)
                 listener.fail(ErrorType.Certificationing.code, ErrorType.Certificationing.msg)
 
@@ -67,6 +74,7 @@ internal class HpGameCertification {
                 HpReportManager.report(HpGameConstant.REPORT_CERTIFICATION,hashMap)
             }else {
                 //认证失败或未认证
+                HpLogUtil.e("HpGameCertification:实名认证失败")
                 startCertification(activity,listener)
                 val hashMap = HashMap<String, Any?>()
                 hashMap["result"] = 0
@@ -75,6 +83,7 @@ internal class HpGameCertification {
             }
         }else {
             //认证失败或未认证
+            HpLogUtil.e("HpGameCertification:实名认证失败")
             startCertification(activity,listener)
             val hashMap = HashMap<String, Any?>()
             hashMap["result"] = 0
@@ -87,6 +96,7 @@ internal class HpGameCertification {
         if (result.isSuccess()) {
             if (result?.data?.status?:-1 == 0){
                 //认证成功
+                HpLogUtil.e("HpGameCertification:跳转回调，认证成功")
                 showResultFragment(activity,CertificationType.SUCCESS){
                     listener.success(result?.data!!)
                 }
@@ -95,6 +105,7 @@ internal class HpGameCertification {
                 HpReportManager.report(HpGameConstant.REPORT_CERTIFICATION_POST,hashMap)
             }else if (result?.data?.status?:-1 == 1) {
                 //认证中
+                HpLogUtil.e("HpGameCertification:跳转回调，认证中")
                 showResultFragment(activity,CertificationType.PROCESSING,null)
                 listener.fail(ErrorType.Certificationing.code, ErrorType.Certificationing.msg)
 
@@ -103,8 +114,8 @@ internal class HpGameCertification {
                 HpReportManager.report(HpGameConstant.REPORT_CERTIFICATION_POST,hashMap)
             }else {
                 //认证失败或未认证
+                HpLogUtil.e("HpGameCertification:跳转回调，认证失败")
                 showResultFragment(activity,CertificationType.FAIL) {
-                    Log.e("sharkchao","showResultFragment-click")
                     startCertification(activity,listener)
                 }
                 val hashMap = HashMap<String, Any?>()
@@ -114,6 +125,7 @@ internal class HpGameCertification {
             }
         }else {
             //认证失败或未认证
+            HpLogUtil.e("HpGameCertification:跳转回调，认证失败")
             showResultFragment(activity,CertificationType.FAIL) {
                 startCertification(activity,listener)
             }
@@ -126,6 +138,7 @@ internal class HpGameCertification {
 
 
     private fun startCertification(activity: Activity,listener: HpCertificationListener) {
+        HpLogUtil.e("HpGameCertification:跳转实名认证页面")
         val intent = Intent(activity, HpCertificationActivity::class.java)
         ActResultRequest(activity).startForResult(intent) { resultCode, data ->
             if (resultCode == HpCertificationActivity.LOGOUT_OUT) {
@@ -146,6 +159,9 @@ internal class HpGameCertification {
         val findFragmentByTag = activity.fragmentManager.findFragmentByTag("HpCertificationResultFragment")
         if (findFragmentByTag?.isAdded == true && findFragmentByTag is DialogFragment) {
             findFragmentByTag.dismiss()
+        }
+        if (activity.isDestroyed) {
+            return
         }
 
         val bundle = Bundle()

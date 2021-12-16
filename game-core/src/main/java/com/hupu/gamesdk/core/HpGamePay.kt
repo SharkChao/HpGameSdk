@@ -19,32 +19,31 @@ class HpGamePay private constructor(private val hpPayEntity: HpPayEntity){
         val listener = object : HpPayListener{
             override fun success() {
                 tempListener.success()
-                HpLogUtil.e("支付成功！")
+                HpLogUtil.e("HpGamePay:支付成功！")
             }
             override fun fail(code: Int, msg: String?) {
                 tempListener.fail(code, msg)
-                HpLogUtil.e("支付失败！code:${code},msg:${msg}")
+                HpLogUtil.e("HpGamePay:支付失败！code:${code},msg:${msg}")
             }
         }
 
 
-
+        HpLogUtil.e("HpGamePay:开始支付")
         val hashMap = HashMap<String, Any?>()
         HpReportManager.report(HpGameConstant.REPORT_PAY_CLICK,hashMap)
 
         if (!HpGameAppInfo.legal) {
+            HpLogUtil.e("HpGamePay:app不合法")
             listener.fail(ErrorType.AppNotLegal.code,ErrorType.AppNotLegal.msg)
             return
         }
 
-
+        if (activity.isDestroyed) {
+            return
+        }
         val findFragmentByTag = activity.fragmentManager.findFragmentByTag("HpPayFragment")
         if (findFragmentByTag?.isAdded == true && findFragmentByTag is DialogFragment) {
             findFragmentByTag.dismiss()
-        }
-
-        if (activity.isDestroyed) {
-            return
         }
 
         val hpPayFragment = HpPayFragment()

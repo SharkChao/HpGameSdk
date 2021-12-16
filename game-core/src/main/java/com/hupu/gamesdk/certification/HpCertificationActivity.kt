@@ -19,6 +19,7 @@ import android.widget.Toast
 import com.gyf.immersionbar.ImmersionBar
 import com.hupu.gamesdk.base.CommonUtil
 import com.hupu.gamesdk.base.HpLoadingFragment
+import com.hupu.gamesdk.base.HpLogUtil
 import com.hupu.gamesdk.base.ReflectUtil
 import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.login.HpLoginManager
@@ -43,6 +44,8 @@ class HpCertificationActivity: FragmentActivity() {
     private lateinit var tvCard: EditText
     private lateinit var rlBack: RelativeLayout
     private lateinit var tvPost: TextView
+    private var lastTime = 0L
+    private var lastLogoutTime = 0L
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ImmersionBar.with(this)
@@ -68,6 +71,14 @@ class HpCertificationActivity: FragmentActivity() {
 
 
         tvLogout.setOnClickListener {
+            HpLogUtil.e("HpGameCertification:用户点击切换账号")
+            val time = System.currentTimeMillis()
+            if (time - lastLogoutTime < 500) {
+                HpLogUtil.e("HpCertificationActivity:切换登陆按钮重复点击")
+                return@setOnClickListener
+            }
+            lastLogoutTime = time
+
             HpGame.logout()
             setResult(LOGOUT_OUT)
             finish()
@@ -109,6 +120,14 @@ class HpCertificationActivity: FragmentActivity() {
 
 
         tvPost.setOnClickListener {
+
+            val time = System.currentTimeMillis()
+            if (time - lastTime < 500) {
+                HpLogUtil.e("HpCertificationActivity:实名提交按钮重复点击")
+                return@setOnClickListener
+            }
+            lastTime = time
+
             if(!checkParamsVaild()) {
                 if (TextUtils.isEmpty(tvName.text.toString())) {
                     Toast.makeText(this,"请输入真实姓名",Toast.LENGTH_SHORT).show()

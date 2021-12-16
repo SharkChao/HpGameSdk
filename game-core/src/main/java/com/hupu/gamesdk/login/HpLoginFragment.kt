@@ -12,10 +12,9 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
+import com.hupu.gamesdk.base.*
 import com.hupu.gamesdk.base.CommonUtil
-import com.hupu.gamesdk.base.ErrorType
 import com.hupu.gamesdk.base.HpGameConstant
-import com.hupu.gamesdk.base.ReflectUtil
 import com.hupu.gamesdk.base.activitycallback.ActResultRequest
 import com.hupu.gamesdk.core.HpGame
 import com.hupu.gamesdk.core.HpGameLogin
@@ -27,6 +26,7 @@ internal class HpLoginFragment: DialogFragment() {
     private var listener: HpGameLogin.HpLoginListener? = null
     private lateinit var tvDesc: TextView
     private lateinit var tvLogin: TextView
+    private var lastTime = 0L
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,16 +58,27 @@ internal class HpLoginFragment: DialogFragment() {
     private fun initEvent() {
         tvLogin.setOnClickListener {
 
+            val time = System.currentTimeMillis()
+            if (time - lastTime < 500) {
+                HpLogUtil.e("HpLoginFragment:登陆按钮重复点击")
+                return@setOnClickListener
+            }
+            lastTime = time
+
+
             if (CommonUtil.isAppInstalled2(activity,HpGameConstant.HUPU_PACKAGE_NAME)) {
                 try {
+                    HpLogUtil.e("HpLoginFragment:开始跳转虎扑")
                    startHpLogin()
                 }catch (e: Exception) {
                     e.printStackTrace()
+                    HpLogUtil.e("HpLoginFragment:跳转虎扑失败,不支持schema跳转")
                     Toast.makeText(activity,"请安装最新版本虎扑后再试！",Toast.LENGTH_SHORT).show()
                     listener?.fail(ErrorType.LoginHpNotSupportSchema.code,ErrorType.LoginHpNotSupportSchema.msg)
                     CommonUtil.goToMarket(activity,HpGameConstant.HUPU_PACKAGE_NAME)
                 }
             }else {
+                HpLogUtil.e("HpLoginFragment:没有安装虎扑app")
                 Toast.makeText(activity,"请安装最新版本虎扑后再试！",Toast.LENGTH_SHORT).show()
                 listener?.fail(ErrorType.LoginNotInstallHp.code,ErrorType.LoginNotInstallHp.msg)
                 CommonUtil.goToMarket(activity,HpGameConstant.HUPU_PACKAGE_NAME)
@@ -92,6 +103,7 @@ internal class HpLoginFragment: DialogFragment() {
                 val jsonData = jsonObject.optJSONObject("data")
                 if (code == 1 && jsonData != null && !TextUtils.isEmpty(jsonData.optString("access_token"))) {
                     //成功
+                    HpLogUtil.e("HpLoginFragment:虎扑授权成功:${result}")
                     val hpUserEntity = HpUserEntity()
                     hpUserEntity.accessToken = jsonData.optString("access_token")
                     hpUserEntity.puid = jsonData.optString("puid")
@@ -101,6 +113,7 @@ internal class HpLoginFragment: DialogFragment() {
 
                     onLoginSuccess()
                 } else {
+                    HpLogUtil.e("HpLoginFragment:虎扑授权失败:${result}")
                     if (code == 0) {
                         Toast.makeText(
                             activity,
@@ -121,6 +134,7 @@ internal class HpLoginFragment: DialogFragment() {
                     }
                 }
             } else {
+                HpLogUtil.e("HpLoginFragment:用户取消授权")
                 Toast.makeText(activity, "授权失败，请稍后重试!", Toast.LENGTH_SHORT).show()
                 listener?.fail(ErrorType.LoginResultError.code, ErrorType.LoginResultError.msg)
             }
