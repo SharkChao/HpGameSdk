@@ -25,6 +25,11 @@ class HpGamePay private constructor(private val hpPayEntity: HpPayEntity){
                 tempListener.fail(code, msg)
                 HpLogUtil.e("HpGamePay:支付失败！code:${code},msg:${msg}")
             }
+
+            override fun cancel() {
+                tempListener.cancel()
+                HpLogUtil.e("HpGamePay:支付取消！")
+            }
         }
 
 
@@ -132,5 +137,6 @@ class HpGamePay private constructor(private val hpPayEntity: HpPayEntity){
     interface HpPayListener {
         fun success()
         fun fail(code: Int,msg: String?)
+        fun cancel()
     }
 }

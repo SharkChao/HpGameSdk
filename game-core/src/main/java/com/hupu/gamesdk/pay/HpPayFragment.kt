@@ -148,6 +148,7 @@ internal class HpPayFragment: DialogFragment() {
 
     private fun initEvent() {
         ivClose.setOnClickListener {
+            listener?.cancel()
             dismiss()
         }
 
