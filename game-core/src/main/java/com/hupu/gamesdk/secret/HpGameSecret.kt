@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity
 
 class HpGameSecret {
     fun start(activity: FragmentActivity, listener: HpSecretListener) {
+
         if (HpSecretManager.getSecretAgree()) {
             listener.agree()
             return
