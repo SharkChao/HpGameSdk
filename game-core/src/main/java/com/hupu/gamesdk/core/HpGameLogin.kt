@@ -41,14 +41,7 @@ class HpGameLogin {
         hpLoadingFragment.isCancelable = false
         hpLoadingFragment.show(activity.fragmentManager,"")
         //检测accessToken是否有效
-
-        var scope = HupuActivityLifecycleCallbacks.getScope(activity)
-        if(scope == null) {
-            HpLogUtil.e("HpGameLogin:activity-scope为空")
-            scope = MainScope()
-        }
-
-        scope.launch {
+        HupuActivityLifecycleCallbacks.getScope(activity)?.launch {
             try {
                 flow {
                     try {

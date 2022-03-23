@@ -41,6 +41,6 @@ object HupuActivityLifecycleCallbacks: Application.ActivityLifecycleCallbacks {
     }
 
     fun getScope(activity: Activity): CoroutineScope? {
-        return scopeMap[activity]
+        return scopeMap[activity] ?: MainScope()
     }
 }
