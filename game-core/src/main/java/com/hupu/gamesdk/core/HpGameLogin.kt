@@ -9,6 +9,7 @@ import com.hupu.gamesdk.login.HpLoginFragment
 import com.hupu.gamesdk.login.HpLoginManager
 import com.hupu.gamesdk.login.HpLoginService
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -27,6 +28,7 @@ class HpGameLogin {
             return
         }
         if (activity.isDestroyed) {
+            HpLogUtil.e("HpGameLogin:activity被销毁")
             return
         }
         val findFragmentByTag = activity.fragmentManager.findFragmentByTag("HpLoginFragment")
@@ -40,8 +42,13 @@ class HpGameLogin {
         hpLoadingFragment.show(activity.fragmentManager,"")
         //检测accessToken是否有效
 
+        var scope = HupuActivityLifecycleCallbacks.getScope(activity)
+        if(scope == null) {
+            HpLogUtil.e("HpGameLogin:activity-scope为空")
+            scope = MainScope()
+        }
 
-        HupuActivityLifecycleCallbacks.getScope(activity)?.launch {
+        scope.launch {
             try {
                 flow {
                     try {
@@ -50,6 +57,7 @@ class HpGameLogin {
                     }catch (e: Exception) {
                         e.printStackTrace()
                         emit(null)
+                        HpLogUtil.e("HpGameLogin:checkAccessToken接口调用失败失败,${e.message}")
                     }
                 }.flowOn(Dispatchers.IO).collectLatest {
                     hpLoadingFragment.dismiss()
@@ -75,6 +83,7 @@ class HpGameLogin {
                 }
             }catch (e: Exception){
                 e.printStackTrace()
+                HpLogUtil.e("HpGameLogin:登陆调用失败失败,${e.message}")
             }
         }
     }
