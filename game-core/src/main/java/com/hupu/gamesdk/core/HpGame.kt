@@ -141,7 +141,7 @@ class HpGame private constructor(private val builder: Builder){
     }
 
     @MainThread
-    fun init(context: Application) {
+    fun init(context: Context) {
         val countDownLatch = CountDownLatch(1)
 
         initCore(context)
@@ -178,7 +178,7 @@ class HpGame private constructor(private val builder: Builder){
      * 初始化
      */
     @MainThread
-    fun initAsync(context: Application,listener: HpGameInitListener) {
+    fun initAsync(context: Context,listener: HpGameInitListener) {
         initCore(context)
         HpLogUtil.e("HpGame-initAsync-start")
         //初始化检测
