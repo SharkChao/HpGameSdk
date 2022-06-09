@@ -10,8 +10,8 @@ import com.hupu.gamesdk.login.HpLoginManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.MediaType
+import okhttp3.RequestBody
 
 object HpReportManager {
     private val mainScope = MainScope()
@@ -84,7 +84,7 @@ object HpReportManager {
         val createReportBean = createReportBean(type, hashMap)
         val toJson = Gson().toJson(createReportBean)
         val convertJson = HPAppInfo.convertJson(toJson)
-        val requestBody = convertJson.toRequestBody("text/plain".toMediaTypeOrNull())
+        val requestBody = RequestBody.create(MediaType.get("text/plain"),convertJson)
         mainScope.launch(Dispatchers.IO) {
             try {
                 service.postReport(requestBody)
